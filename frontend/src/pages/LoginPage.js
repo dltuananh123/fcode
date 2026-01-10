@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { loginUser } from "../services/authService";
-import { useNavigate, Link } from "react-router-dom"; // Dùng để chuyển trang
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // Để lưu thông báo lỗi
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Chặn reload trang
+    e.preventDefault();
     try {
       await loginUser({ email, password });
       alert("Đăng nhập thành công!");
-      navigate("/"); // Chuyển về trang chủ (chưa làm, kệ nó)
+      navigate("/");
     } catch (err) {
       setError(err.message || "Sai email hoặc mật khẩu!");
     }

@@ -23,11 +23,7 @@ const PORT = process.env.PORT || 8080;
 const startServer = async () => {
   try {
     await connectDB();
-
-    // CHẠY LẦN ĐẦU: force: true để tạo bảng mới tinh.
-    // CHẠY LẦN SAU: Sửa thành alter: true
-    await sequelize.sync({ alter: true });
-
+    await sequelize.sync({ alter: true }); // lần đầu dùng sync({ force: true }) để tạo bảng mới
     console.log("Created tables successfully");
 
     app.listen(PORT, () => {

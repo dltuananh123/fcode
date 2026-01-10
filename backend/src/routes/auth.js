@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { register, login } = require("../controllers/authController");
 
-// Định nghĩa các đường dẫn
 router.post("/register", register);
 router.post("/login", login);
 

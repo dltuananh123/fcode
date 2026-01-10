@@ -7,7 +7,7 @@ const RegisterPage = () => {
     full_name: "",
     email: "",
     password: "",
-    role: "student", // Mặc định là học sinh
+    role: "student",
   });
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const RegisterPage = () => {
     try {
       await registerUser(formData);
       alert("Đăng ký thành công! Mời bạn đăng nhập.");
-      navigate("/login"); // Chuyển sang trang Login
+      navigate("/login");
     } catch (err) {
       alert(err.message || "Lỗi đăng ký");
     }

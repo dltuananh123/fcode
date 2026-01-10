@@ -10,7 +10,6 @@ const LessonProgress = require("./LessonProgress");
 const Review = require("./Review");
 const Message = require("./Message");
 
-// Relationships
 User.hasMany(Course, { foreignKey: "teacher_id", as: "teaching_courses" });
 Course.belongsTo(User, { foreignKey: "teacher_id", as: "teacher" });
 

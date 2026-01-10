@@ -7,16 +7,13 @@ import {
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap cho đẹp
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Nếu vào trang chủ "/" -> Tự nhảy sang "/login" */}
         <Route path="/" element={<Navigate to="/login" />} />
-
-        {/* Định nghĩa các đường dẫn */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
