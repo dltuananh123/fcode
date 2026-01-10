@@ -5,6 +5,7 @@ require("dotenv").config();
 const { connectDB } = require("./src/config/connectDB");
 const { sequelize } = require("./src/models/index");
 const authRoutes = require("./src/routes/auth");
+const courseRoutes = require("./src/routes/course");
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/courses", courseRoutes);
 app.get("/", (req, res) => {
   res.send("F-Code Server Started");
 });
