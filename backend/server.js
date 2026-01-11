@@ -8,6 +8,9 @@ const { connectDB } = require("./src/config/connectDB");
 const { sequelize } = require("./src/models/index");
 const authRoutes = require("./src/routes/auth");
 const courseRoutes = require("./src/routes/course");
+const { Message } = require("./src/models/index");
+
+const chatRoutes = require("./src/routes/chat");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -20,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
   res.send("F-Code Server Started");
 });
@@ -36,8 +40,19 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  socket.on("send_message", (data) => {
+  socket.on("send_message", async (data) => {
     console.log("Receive message:", data);
+
+    try {
+      await Message.create({
+        sender_id: data.user_id,
+        receiver_id: 1,
+        content: data.message,
+        is_read: true,
+      });
+    } catch (err) {
+      console.error("Error saving message:", err);
+    }
 
     io.emit("receive_message", data);
   });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import axios from "axios";
 
-// Connect to Backend
 const socket = io.connect("http://localhost:8080");
 
 const ChatBox = () => {
@@ -9,31 +9,72 @@ const ChatBox = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
-  // Get username of current user
-  const user = JSON.parse(localStorage.getItem("user"))?.user;
+  const userObj = JSON.parse(localStorage.getItem("user"));
+  const user = userObj?.user;
   const username = user ? user.full_name : "Guest";
+  const userId = user ? user.id : null;
 
   useEffect(() => {
-    // Listen to messages from Server
+    const fetchHistory = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/chat");
+
+        const history = res.data.map((msg) => {
+          let timeString = "";
+          try {
+            timeString = msg.created_at
+              ? new Date(msg.created_at).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+          } catch (e) {
+            timeString = "";
+          }
+
+          return {
+            author: msg.sender ? msg.sender.full_name : "Anonymous",
+            message: msg.content,
+            time: timeString,
+          };
+        });
+        setMessageList(history);
+      } catch (err) {
+        console.log("Error loading chat:", err);
+      }
+    };
+
+    if (isOpen) {
+      fetchHistory();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
-
-    // Cleanup to avoid duplicate listening
     return () => socket.off("receive_message");
   }, []);
 
   const sendMessage = async () => {
-    if (currentMessage !== "") {
+    if (currentMessage !== "" && userId) {
       const messageData = {
+        user_id: userId,
         author: username,
         message: currentMessage,
-        time: new Date().toLocaleTimeString(),
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
 
-      // Send message to Server
       await socket.emit("send_message", messageData);
       setCurrentMessage("");
+    } else if (!userId) {
+      alert("You need to login to chat!");
     }
   };
 
@@ -41,7 +82,6 @@ const ChatBox = () => {
     <div
       style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}
     >
-      {/* Toggle chat */}
       <button
         className="btn btn-primary rounded-circle p-3 shadow"
         onClick={() => setIsOpen(!isOpen)}
@@ -49,7 +89,6 @@ const ChatBox = () => {
         Chat
       </button>
 
-      {/* Chat box */}
       {isOpen && (
         <div
           className="card shadow mt-2"
@@ -63,7 +102,6 @@ const ChatBox = () => {
             ></button>
           </div>
 
-          {/* Message list */}
           <div
             className="card-body overflow-auto"
             style={{ height: "280px", backgroundColor: "#f8f9fa" }}
@@ -75,24 +113,41 @@ const ChatBox = () => {
                   msg.author === username ? "text-end" : "text-start"
                 }`}
               >
-                <small className="text-muted" style={{ fontSize: "10px" }}>
+                <small
+                  className="text-muted fw-bold"
+                  style={{
+                    fontSize: "11px",
+                    display: "block",
+                    marginBottom: "2px",
+                  }}
+                >
                   {msg.author}
                 </small>
+
                 <div
                   className={`p-2 rounded ${
                     msg.author === username
                       ? "bg-primary text-white"
                       : "bg-white border"
                   }`}
-                  style={{ display: "inline-block", maxWidth: "80%" }}
+                  style={{
+                    display: "inline-block",
+                    maxWidth: "80%",
+                    wordWrap: "break-word",
+                  }}
                 >
                   {msg.message}
                 </div>
+                <small
+                  className="text-muted d-block mt-1"
+                  style={{ fontSize: "9px" }}
+                >
+                  {msg.time}
+                </small>
               </div>
             ))}
           </div>
 
-          {/* Input message */}
           <div className="card-footer d-flex">
             <input
               type="text"
