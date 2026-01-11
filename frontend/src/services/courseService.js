@@ -21,3 +21,23 @@ export const getCourseById = async (id) => {
     return null;
   }
 };
+
+export const enrollCourse = async (courseId) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.post(
+      `${API_URL}/enroll`,
+      { courseId },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};

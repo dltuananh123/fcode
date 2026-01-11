@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getCourseById } from "../services/courseService";
+import { getCourseById, enrollCourse } from "../services/courseService";
 
 const CourseDetailPage = () => {
   const { id } = useParams(); // Get ID from URL (e.g. /course/1 -> id = 1)
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const handleEnroll = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      alert("You need to login to enroll in this course!");
+      return;
+    }
+
+    if (window.confirm("Are you sure you want to enroll in this course?")) {
+      try {
+        await enrollCourse(id);
+        alert("Enrollment successful! Good luck.");
+      } catch (error) {
+        alert(error.message || "Enrollment failed");
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -59,8 +75,11 @@ const CourseDetailPage = () => {
                   ? "Free"
                   : parseInt(course.price).toLocaleString() + " $"}
               </h3>
-              <button className="btn btn-primary w-100 btn-lg mt-3">
-                Register now
+              <button
+                className="btn btn-primary w-100 btn-lg mt-3"
+                onClick={handleEnroll}
+              >
+                Enroll now
               </button>
               <ul className="list-group list-group-flush mt-3">
                 <li className="list-group-item">Level: {course.level}</li>

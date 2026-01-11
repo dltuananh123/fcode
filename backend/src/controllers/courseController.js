@@ -1,5 +1,6 @@
 const { Course, User, Category } = require("../models");
 const { Chapter, Lesson } = require("../models");
+const { Enrollment } = require("../models");
 
 const getAllCourses = async (req, res) => {
   try {
@@ -75,4 +76,31 @@ const getCourseDetail = async (req, res) => {
   }
 };
 
-module.exports = { getAllCourses, getCourseDetail };
+const enrollCourse = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+    const userId = req.user.id;
+
+    const existingEnrollment = await Enrollment.findOne({
+      where: { user_id: userId, course_id: courseId },
+    });
+
+    if (existingEnrollment) {
+      return res
+        .status(400)
+        .json({ message: "You have already enrolled in this course!" });
+    }
+
+    await Enrollment.create({
+      user_id: userId,
+      course_id: courseId,
+    });
+
+    res.status(201).json({ message: "Enrollment successful!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { getAllCourses, getCourseDetail, enrollCourse };
