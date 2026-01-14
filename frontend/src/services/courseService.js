@@ -41,3 +41,58 @@ export const enrollCourse = async (courseId) => {
       : { message: "Connection error" };
   }
 };
+
+export const getEnrolledCourse = async (courseId) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.get(`${API_URL}/enrolled/${courseId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error when getting enrolled course:", error);
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};
+
+export const getLessonDetail = async (lessonId) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.get(`${API_URL}/lesson/${lessonId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error when getting lesson detail:", error);
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};
+
+export const markLessonComplete = async (lessonId) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.post(
+      `${API_URL}/lesson/${lessonId}/complete`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};
+
