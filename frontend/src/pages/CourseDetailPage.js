@@ -1,11 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { getCourseById, enrollCourse } from "../services/courseService";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { getCourseById, enrollCourse, getEnrolledCourse } from "../services/courseService";
 
 const CourseDetailPage = () => {
   const { id } = useParams(); // Get ID from URL (e.g. /course/1 -> id = 1)
+  const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [checkingEnrollment, setCheckingEnrollment] = useState(true);
+
+  // Check if user is already enrolled
+  useEffect(() => {
+    const checkEnrollment = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        try {
+          await getEnrolledCourse(id);
+          setIsEnrolled(true);
+        } catch (error) {
+          // User is not enrolled, that's fine
+          setIsEnrolled(false);
+        }
+      }
+      setCheckingEnrollment(false);
+    };
+    checkEnrollment();
+  }, [id]);
+
   const handleEnroll = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -17,6 +39,8 @@ const CourseDetailPage = () => {
       try {
         await enrollCourse(id);
         alert("Enrollment successful! Good luck.");
+        setIsEnrolled(true);
+        navigate(`/course/${id}/lessons`);
       } catch (error) {
         alert(error.message || "Enrollment failed");
       }
@@ -75,12 +99,26 @@ const CourseDetailPage = () => {
                   ? "Free"
                   : parseInt(course.price).toLocaleString() + " $"}
               </h3>
-              <button
-                className="btn btn-primary w-100 btn-lg mt-3"
-                onClick={handleEnroll}
-              >
-                Enroll now
-              </button>
+              {checkingEnrollment ? (
+                <button className="btn btn-secondary w-100 btn-lg mt-3" disabled>
+                  Checking...
+                </button>
+              ) : isEnrolled ? (
+                <Link
+                  to={`/course/${id}/lessons`}
+                  className="btn btn-success w-100 btn-lg mt-3"
+                >
+                  <i className="bi bi-play-circle me-2"></i>
+                  Go to Lessons
+                </Link>
+              ) : (
+                <button
+                  className="btn btn-primary w-100 btn-lg mt-3"
+                  onClick={handleEnroll}
+                >
+                  Enroll now
+                </button>
+              )}
               <ul className="list-group list-group-flush mt-3">
                 <li className="list-group-item">Level: {course.level}</li>
                 <li className="list-group-item">
@@ -124,11 +162,10 @@ const CourseDetailPage = () => {
                             >
                               <span>
                                 <i
-                                  className={`bi ${
-                                    lesson.content_type === "video"
-                                      ? "bi-play-circle-fill"
-                                      : "bi-file-text"
-                                  } me-2`}
+                                  className={`bi ${lesson.content_type === "video"
+                                    ? "bi-play-circle-fill"
+                                    : "bi-file-text"
+                                    } me-2`}
                                 ></i>
                                 {lesson.title}
                               </span>
@@ -152,3 +189,4 @@ const CourseDetailPage = () => {
 };
 
 export default CourseDetailPage;
+
