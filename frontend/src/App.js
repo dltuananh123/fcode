@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import CourseDetailPage from "./pages/CourseDetailPage";
+import CoursePage from "./pages/CoursePage";
 import ChatBox from "./components/ChatBox";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -21,6 +22,8 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/course/:id" element={<CourseDetailPage />} />
+        <Route path="/course/:id/learn" element={<CoursePage />} />
+        <Route path="/course/:id/learn/:lessonId" element={<CoursePage />} />
       </Routes>
       {/* Chat box */}
       <ChatBox />

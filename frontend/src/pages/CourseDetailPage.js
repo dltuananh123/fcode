@@ -81,6 +81,13 @@ const CourseDetailPage = () => {
               >
                 Enroll now
               </button>
+              <Link
+                to={`/course/${id}/learn`}
+                className="btn btn-success w-100 btn-lg mt-2"
+              >
+                <i className="bi bi-play-fill me-2"></i>
+                Start Learning
+              </Link>
               <ul className="list-group list-group-flush mt-3">
                 <li className="list-group-item">Level: {course.level}</li>
                 <li className="list-group-item">
@@ -124,11 +131,10 @@ const CourseDetailPage = () => {
                             >
                               <span>
                                 <i
-                                  className={`bi ${
-                                    lesson.content_type === "video"
+                                  className={`bi ${lesson.content_type === "video"
                                       ? "bi-play-circle-fill"
                                       : "bi-file-text"
-                                  } me-2`}
+                                    } me-2`}
                                 ></i>
                                 {lesson.title}
                               </span>
