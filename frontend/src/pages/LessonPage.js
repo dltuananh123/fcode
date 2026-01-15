@@ -1,355 +1,407 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
 import {
-    getLessonDetail,
-    getEnrolledCourse,
-    markLessonComplete,
+  Box,
+  Container,
+  Typography,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Chip,
+  IconButton,
+  Paper,
+  Divider,
+  CircularProgress,
+  Alert,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Card,
+  CardContent,
+} from "@mui/material";
+import {
+  Menu,
+  CheckCircle,
+  RadioButtonUnchecked,
+  PlayCircle,
+  Description,
+  ArrowBack,
+  NavigateBefore,
+  NavigateNext,
+  CheckCircleOutline,
+} from "@mui/icons-material";
+import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  getLessonDetail,
+  getEnrolledCourse,
+  markLessonComplete,
 } from "../services/courseService";
 
 const LessonPage = () => {
-    const { courseId, lessonId } = useParams();
-    const navigate = useNavigate();
-    const [lesson, setLesson] = useState(null);
-    const [course, setCourse] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { courseId, lessonId } = useParams();
+  const navigate = useNavigate();
+  const [lesson, setLesson] = useState(null);
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [markingComplete, setMarkingComplete] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [lessonData, courseData] = await Promise.all([
-                    getLessonDetail(lessonId),
-                    getEnrolledCourse(courseId),
-                ]);
-                setLesson(lessonData);
-                setCourse(courseData);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message || "Failed to load lesson");
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [courseId, lessonId]);
-
-    // Extract YouTube video ID from URL
-    const getYouTubeVideoId = (url) => {
-        if (!url) return null;
-        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-        const match = url.match(regex);
-        return match ? match[1] : null;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [lessonData, courseData] = await Promise.all([
+          getLessonDetail(lessonId),
+          getEnrolledCourse(courseId),
+        ]);
+        setLesson(lessonData);
+        setCourse(courseData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message || "Failed to load lesson");
+        setLoading(false);
+      }
     };
+    fetchData();
+  }, [courseId, lessonId]);
 
-    // Find current lesson index and navigation
-    const findLessonNavigation = () => {
-        if (!course || !course.chapters) return { prev: null, next: null, current: null };
+  const getYouTubeVideoId = (url) => {
+    if (!url) return null;
+    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
 
-        const allLessons = [];
-        course.chapters.forEach((chapter) => {
-            chapter.lessons?.forEach((l) => {
-                allLessons.push({ ...l, chapterTitle: chapter.title });
-            });
-        });
+  const findLessonNavigation = () => {
+    if (!course || !course.chapters) return { prev: null, next: null, current: null, totalLessons: 0, currentNumber: 0 };
 
-        const currentIndex = allLessons.findIndex(
-            (l) => l.lesson_id === parseInt(lessonId)
-        );
+    const allLessons = [];
+    course.chapters.forEach((chapter) => {
+      chapter.lessons?.forEach((l) => {
+        allLessons.push({ ...l, chapterTitle: chapter.title });
+      });
+    });
 
-        return {
-            prev: currentIndex > 0 ? allLessons[currentIndex - 1] : null,
-            next: currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null,
-            current: allLessons[currentIndex] || null,
-            totalLessons: allLessons.length,
-            currentNumber: currentIndex + 1,
-        };
-    };
-
-    const handleMarkComplete = async () => {
-        try {
-            await markLessonComplete(lessonId);
-            setLesson((prev) => ({
-                ...prev,
-                progress: { ...prev.progress, is_completed: true },
-            }));
-            // Update course data to reflect completion
-            setCourse((prev) => {
-                const updated = { ...prev };
-                updated.chapters = updated.chapters.map((chapter) => ({
-                    ...chapter,
-                    lessons: chapter.lessons.map((l) =>
-                        l.lesson_id === parseInt(lessonId)
-                            ? { ...l, progress: { ...l.progress, is_completed: true } }
-                            : l
-                    ),
-                }));
-                return updated;
-            });
-        } catch (err) {
-            alert(err.message || "Failed to mark lesson as complete");
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center vh-100">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="container mt-5">
-                <div className="alert alert-danger text-center">
-                    <h4>Access Denied</h4>
-                    <p>{error}</p>
-                    <Link to="/" className="btn btn-primary">
-                        Back to Home
-                    </Link>
-                </div>
-            </div>
-        );
-    }
-
-    if (!lesson) {
-        return (
-            <div className="container mt-5 text-center">
-                <h3 className="text-danger">Lesson not found!</h3>
-                <Link to={`/course/${courseId}/lessons`} className="btn btn-primary mt-3">
-                    Back to Course
-                </Link>
-            </div>
-        );
-    }
-
-    const videoId = getYouTubeVideoId(lesson.video_url);
-    const nav = findLessonNavigation();
-
-    return (
-        <div className="d-flex" style={{ minHeight: "100vh" }}>
-            {/* Sidebar */}
-            <div
-                className={`bg-white border-end ${sidebarOpen ? "" : "d-none"}`}
-                style={{ width: "350px", overflowY: "auto", maxHeight: "100vh" }}
-            >
-                <div className="p-3 bg-dark text-white">
-                    <Link
-                        to={`/course/${courseId}/lessons`}
-                        className="text-white text-decoration-none d-flex align-items-center mb-2"
-                    >
-                        <i className="bi bi-arrow-left me-2"></i>
-                        Back to Course
-                    </Link>
-                    <h6 className="mb-0 fw-bold">{course?.title}</h6>
-                </div>
-
-                <div className="accordion" id="lessonsSidebar">
-                    {course?.chapters?.map((chapter, chapterIndex) => (
-                        <div className="accordion-item border-0" key={chapter.chapter_id}>
-                            <h2 className="accordion-header">
-                                <button
-                                    className="accordion-button py-2 px-3 small"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target={`#sidebarChapter${chapterIndex}`}
-                                    aria-expanded="true"
-                                >
-                                    <span className="badge bg-secondary me-2 small">
-                                        {chapterIndex + 1}
-                                    </span>
-                                    <span className="fw-medium">{chapter.title}</span>
-                                </button>
-                            </h2>
-                            <div
-                                id={`sidebarChapter${chapterIndex}`}
-                                className="accordion-collapse collapse show"
-                            >
-                                <ul className="list-group list-group-flush">
-                                    {chapter.lessons?.map((l) => (
-                                        <li
-                                            key={l.lesson_id}
-                                            className={`list-group-item list-group-item-action py-2 px-4 small d-flex align-items-center ${l.lesson_id === parseInt(lessonId)
-                                                    ? "bg-primary bg-opacity-10 border-start border-primary border-3"
-                                                    : ""
-                                                }`}
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() =>
-                                                navigate(`/course/${courseId}/lesson/${l.lesson_id}`)
-                                            }
-                                        >
-                                            {l.progress?.is_completed ? (
-                                                <i className="bi bi-check-circle-fill text-success me-2"></i>
-                                            ) : (
-                                                <i className="bi bi-circle text-muted me-2"></i>
-                                            )}
-                                            <span
-                                                className={
-                                                    l.lesson_id === parseInt(lessonId) ? "fw-bold" : ""
-                                                }
-                                            >
-                                                {l.title}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="flex-grow-1 bg-light">
-                {/* Top bar */}
-                <div className="bg-white border-bottom py-2 px-4 d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                        <button
-                            className="btn btn-outline-secondary btn-sm me-3"
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                        >
-                            <i className={`bi ${sidebarOpen ? "bi-chevron-left" : "bi-list"}`}></i>
-                        </button>
-                        <span className="text-muted small">
-                            Lesson {nav.currentNumber} of {nav.totalLessons}
-                        </span>
-                    </div>
-                    <div>
-                        {!lesson.progress?.is_completed && (
-                            <button
-                                className="btn btn-success btn-sm"
-                                onClick={handleMarkComplete}
-                            >
-                                <i className="bi bi-check-circle me-1"></i>
-                                Mark as Complete
-                            </button>
-                        )}
-                        {lesson.progress?.is_completed && (
-                            <span className="badge bg-success">
-                                <i className="bi bi-check-circle-fill me-1"></i>
-                                Completed
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                {/* Video Container */}
-                <div className="container-fluid px-0">
-                    {lesson.content_type === "video" && videoId ? (
-                        <div
-                            className="ratio ratio-16x9 bg-dark"
-                            style={{ maxHeight: "70vh" }}
-                        >
-                            <iframe
-                                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-                                title={lesson.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            ></iframe>
-                        </div>
-                    ) : lesson.content_type === "video" && lesson.video_url ? (
-                        <div
-                            className="ratio ratio-16x9 bg-dark"
-                            style={{ maxHeight: "70vh" }}
-                        >
-                            <video controls className="w-100">
-                                <source src={lesson.video_url} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                    ) : (
-                        <div
-                            className="bg-primary bg-opacity-10 py-5 text-center"
-                            style={{ minHeight: "200px" }}
-                        >
-                            <i className="bi bi-file-text display-1 text-primary"></i>
-                            <h4 className="mt-3">Document Lesson</h4>
-                        </div>
-                    )}
-                </div>
-
-                {/* Lesson Content */}
-                <div className="container py-4">
-                    <div className="row">
-                        <div className="col-lg-8">
-                            {/* Lesson Title */}
-                            <h2 className="fw-bold mb-3">{lesson.title}</h2>
-
-                            {/* Lesson Meta */}
-                            <div className="d-flex align-items-center mb-4 text-muted">
-                                <span className="me-3">
-                                    <i className="bi bi-clock me-1"></i>
-                                    {Math.floor(lesson.duration_seconds / 60)} minutes
-                                </span>
-                                <span className="me-3">
-                                    <i className="bi bi-collection me-1"></i>
-                                    {lesson.content_type === "video" ? "Video" : "Document"}
-                                </span>
-                            </div>
-
-                            {/* Lesson Content Text */}
-                            {lesson.content_text && (
-                                <div className="card shadow-sm">
-                                    <div className="card-header bg-white">
-                                        <h5 className="mb-0">
-                                            <i className="bi bi-journal-text me-2"></i>
-                                            Lesson Content
-                                        </h5>
-                                    </div>
-                                    <div className="card-body">
-                                        <div
-                                            className="lesson-content"
-                                            style={{ whiteSpace: "pre-wrap" }}
-                                        >
-                                            {lesson.content_text}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Navigation */}
-                            <div className="d-flex justify-content-between mt-4 pt-4 border-top">
-                                {nav.prev ? (
-                                    <button
-                                        className="btn btn-outline-primary"
-                                        onClick={() =>
-                                            navigate(`/course/${courseId}/lesson/${nav.prev.lesson_id}`)
-                                        }
-                                    >
-                                        <i className="bi bi-chevron-left me-2"></i>
-                                        Previous: {nav.prev.title}
-                                    </button>
-                                ) : (
-                                    <div></div>
-                                )}
-                                {nav.next ? (
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={() =>
-                                            navigate(`/course/${courseId}/lesson/${nav.next.lesson_id}`)
-                                        }
-                                    >
-                                        Next: {nav.next.title}
-                                        <i className="bi bi-chevron-right ms-2"></i>
-                                    </button>
-                                ) : (
-                                    <Link
-                                        to={`/course/${courseId}/lessons`}
-                                        className="btn btn-success"
-                                    >
-                                        <i className="bi bi-check-circle me-2"></i>
-                                        Complete Course
-                                    </Link>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    const currentIndex = allLessons.findIndex(
+      (l) => l.lesson_id === parseInt(lessonId)
     );
+
+    return {
+      prev: currentIndex > 0 ? allLessons[currentIndex - 1] : null,
+      next: currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null,
+      current: allLessons[currentIndex] || null,
+      totalLessons: allLessons.length,
+      currentNumber: currentIndex + 1,
+    };
+  };
+
+  const handleMarkComplete = async () => {
+    setMarkingComplete(true);
+    try {
+      await markLessonComplete(lessonId);
+      setLesson((prev) => ({
+        ...prev,
+        progress: { ...prev.progress, is_completed: true },
+      }));
+      setCourse((prev) => {
+        const updated = { ...prev };
+        updated.chapters = updated.chapters.map((chapter) => ({
+          ...chapter,
+          lessons: chapter.lessons.map((l) =>
+            l.lesson_id === parseInt(lessonId)
+              ? { ...l, progress: { ...l.progress, is_completed: true } }
+              : l
+          ),
+        }));
+        return updated;
+      });
+    } catch (err) {
+      alert(err.message || "Failed to mark lesson as complete");
+    } finally {
+      setMarkingComplete(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+        <Button component={RouterLink} to="/" variant="contained">
+          Về trang chủ
+        </Button>
+      </Container>
+    );
+  }
+
+  if (!lesson) {
+    return (
+      <Container sx={{ mt: 4, textAlign: "center" }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Lesson not found!
+        </Alert>
+        <Button component={RouterLink} to={`/course/${courseId}/lessons`} variant="contained">
+          Về khóa học
+        </Button>
+      </Container>
+    );
+  }
+
+  const videoId = getYouTubeVideoId(lesson.video_url);
+  const nav = findLessonNavigation();
+  const drawerWidth = 350;
+
+  return (
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+      <Drawer
+        variant="persistent"
+        open={sidebarOpen}
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <Box sx={{ bgcolor: "primary.main", color: "white", p: 2 }}>
+          <Button
+            component={RouterLink}
+            to={`/course/${courseId}/lessons`}
+            startIcon={<ArrowBack />}
+            sx={{ color: "white", mb: 1 }}
+          >
+            Về khóa học
+          </Button>
+          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+            {course?.title}
+          </Typography>
+        </Box>
+        <Box sx={{ overflow: "auto" }}>
+          {course?.chapters?.map((chapter, chapterIndex) => (
+            <Accordion key={chapter.chapter_id} defaultExpanded={chapterIndex === 0}>
+              <AccordionSummary>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {chapter.title}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0 }}>
+                <List dense>
+                  {chapter.lessons?.map((l) => (
+                    <ListItem key={l.lesson_id} disablePadding>
+                      <ListItemButton
+                        selected={l.lesson_id === parseInt(lessonId)}
+                        onClick={() => navigate(`/course/${courseId}/lesson/${l.lesson_id}`)}
+                      >
+                        <ListItemIcon>
+                          {l.progress?.is_completed ? (
+                            <CheckCircle color="success" fontSize="small" />
+                          ) : (
+                            <RadioButtonUnchecked fontSize="small" />
+                          )}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={l.title}
+                          primaryTypographyProps={{
+                            fontSize: "0.875rem",
+                            fontWeight: l.lesson_id === parseInt(lessonId) ? 600 : 400,
+                          }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </Box>
+      </Drawer>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          bgcolor: "#f5f5f5",
+          minHeight: "100vh",
+        }}
+      >
+        <Paper
+          elevation={1}
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 0,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <IconButton onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <Menu />
+            </IconButton>
+            <Typography variant="body2" color="text.secondary">
+              Bài {nav.currentNumber} / {nav.totalLessons}
+            </Typography>
+          </Box>
+          <Box>
+            {lesson.progress?.is_completed ? (
+              <Chip
+                icon={<CheckCircleOutline />}
+                label="Đã hoàn thành"
+                color="success"
+                variant="outlined"
+              />
+            ) : (
+              <Button
+                variant="contained"
+                color="success"
+                size="small"
+                startIcon={<CheckCircleOutline />}
+                onClick={handleMarkComplete}
+                disabled={markingComplete}
+              >
+                {markingComplete ? <CircularProgress size={16} /> : "Đánh dấu hoàn thành"}
+              </Button>
+            )}
+          </Box>
+        </Paper>
+
+        <Box sx={{ bgcolor: "#000" }}>
+          {lesson.content_type === "video" && videoId ? (
+            <Box
+              sx={{
+                position: "relative",
+                paddingTop: "56.25%",
+                maxHeight: "70vh",
+              }}
+            >
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                title={lesson.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </Box>
+          ) : lesson.content_type === "video" && lesson.video_url ? (
+            <Box
+              component="video"
+              controls
+              sx={{ width: "100%", maxHeight: "70vh" }}
+            >
+              <source src={lesson.video_url} type="video/mp4" />
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                minHeight: "200px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "primary.light",
+                color: "white",
+              }}
+            >
+              <Description sx={{ fontSize: 60, mb: 2 }} />
+              <Typography variant="h5">Tài liệu bài học</Typography>
+            </Box>
+          )}
+        </Box>
+
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 500 }}>
+            {lesson.title}
+          </Typography>
+
+          <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+            <Chip
+              icon={<PlayCircle />}
+              label={`${Math.floor(lesson.duration_seconds / 60)} phút`}
+              variant="outlined"
+            />
+            <Chip
+              label={lesson.content_type === "video" ? "Video" : "Tài liệu"}
+              variant="outlined"
+            />
+          </Box>
+
+          {lesson.content_text && (
+            <Card sx={{ mb: 4 }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
+                  Nội dung bài học
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ whiteSpace: "pre-wrap" }}
+                  color="text.secondary"
+                >
+                  {lesson.content_text}
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
+
+          <Divider sx={{ my: 4 }} />
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+            {nav.prev ? (
+              <Button
+                variant="outlined"
+                startIcon={<NavigateBefore />}
+                onClick={() => navigate(`/course/${courseId}/lesson/${nav.prev.lesson_id}`)}
+                sx={{ flex: 1 }}
+              >
+                Trước: {nav.prev.title}
+              </Button>
+            ) : (
+              <Box sx={{ flex: 1 }} />
+            )}
+            {nav.next ? (
+              <Button
+                variant="contained"
+                endIcon={<NavigateNext />}
+                onClick={() => navigate(`/course/${courseId}/lesson/${nav.next.lesson_id}`)}
+                sx={{ flex: 1 }}
+              >
+                Tiếp: {nav.next.title}
+              </Button>
+            ) : (
+              <Button
+                component={RouterLink}
+                to={`/course/${courseId}/lessons`}
+                variant="contained"
+                color="success"
+                sx={{ flex: 1 }}
+              >
+                Hoàn thành khóa học
+              </Button>
+            )}
+          </Box>
+        </Container>
+      </Box>
+    </Box>
+  );
 };
 
 export default LessonPage;

@@ -1,6 +1,18 @@
 import React, { useState } from "react";
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  Link,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { registerUser } from "../services/authService";
-import { useNavigate, Link } from "react-router-dom";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +21,8 @@ const RegisterPage = () => {
     password: "",
     role: "student",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,74 +31,137 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     try {
       await registerUser(formData);
-      alert("Đăng ký thành công! Mời bạn đăng nhập.");
       navigate("/login");
     } catch (err) {
-      alert(err.message || "Lỗi đăng ký");
+      setError(err.message || "Lỗi đăng ký");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card mx-auto shadow" style={{ maxWidth: "500px" }}>
-        <div className="card-body p-4">
-          <h3 className="card-title text-center mb-4">Đăng Ký Tài Khoản</h3>
-          <form onSubmit={handleRegister}>
-            <div className="mb-3">
-              <label className="form-label">Họ và Tên</label>
-              <input
-                type="text"
-                name="full_name"
-                className="form-control"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Mật khẩu</label>
-              <input
-                type="password"
-                name="password"
-                className="form-control"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Vai trò</label>
-              <select
-                name="role"
-                className="form-select"
-                onChange={handleChange}
-              >
-                <option value="student">Học sinh</option>
-                <option value="teacher">Giáo viên</option>
-              </select>
-            </div>
-            <button type="submit" className="btn btn-success w-100">
-              Đăng Ký
-            </button>
-          </form>
-          <div className="mt-3 text-center">
-            <small>
-              Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+        padding: 2,
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={8}
+          sx={{
+            padding: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{
+              mb: 1,
+              fontWeight: 500,
+              color: "primary.main",
+            }}
+          >
+            Đăng Ký Tài Khoản
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Tạo tài khoản mới để bắt đầu học tập
+          </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleRegister} sx={{ width: "100%" }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="full_name"
+              label="Họ và Tên"
+              name="full_name"
+              autoComplete="name"
+              autoFocus
+              value={formData.full_name}
+              onChange={handleChange}
+              variant="outlined"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleChange}
+              variant="outlined"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mật khẩu"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+              value={formData.password}
+              onChange={handleChange}
+              variant="outlined"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              select
+              id="role"
+              label="Vai trò"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              variant="outlined"
+            >
+              <MenuItem value="student">Học sinh</MenuItem>
+              <MenuItem value="teacher">Giáo viên</MenuItem>
+            </TextField>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2, py: 1.5 }}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : "Đăng Ký"}
+            </Button>
+          </Box>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              Đã có tài khoản?{" "}
+              <Link component={RouterLink} to="/login" underline="hover">
+                Đăng nhập
+              </Link>
+            </Typography>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

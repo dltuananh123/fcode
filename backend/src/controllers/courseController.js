@@ -265,6 +265,13 @@ const markLessonComplete = async (req, res) => {
         {
           model: Chapter,
           as: "chapter",
+          include: [
+            {
+              model: Course,
+              as: "course",
+              attributes: ["course_id"],
+            },
+          ],
         },
       ],
     });
@@ -273,7 +280,7 @@ const markLessonComplete = async (req, res) => {
       return res.status(404).json({ message: "Lesson not found" });
     }
 
-    const courseId = lesson.chapter.course_id;
+    const courseId = lesson.chapter.course.course_id;
 
     // Check if user is enrolled
     const enrollment = await Enrollment.findOne({
@@ -304,6 +311,65 @@ const markLessonComplete = async (req, res) => {
   }
 };
 
+// Update lesson progress (watch time)
+const updateLessonProgress = async (req, res) => {
+  try {
+    const { lessonId } = req.params;
+    const { last_watched_second } = req.body;
+    const userId = req.user.id;
+
+    const lesson = await Lesson.findOne({
+      where: { lesson_id: lessonId },
+      include: [
+        {
+          model: Chapter,
+          as: "chapter",
+          include: [
+            {
+              model: Course,
+              as: "course",
+              attributes: ["course_id"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!lesson) {
+      return res.status(404).json({ message: "Lesson not found" });
+    }
+
+    const courseId = lesson.chapter.course.course_id;
+
+    // Check if user is enrolled
+    const enrollment = await Enrollment.findOne({
+      where: { user_id: userId, course_id: courseId },
+    });
+
+    if (!enrollment) {
+      return res
+        .status(403)
+        .json({ message: "You are not enrolled in this course" });
+    }
+
+    // Create or update progress
+    const [progress, created] = await LessonProgress.findOrCreate({
+      where: { user_id: userId, lesson_id: lessonId },
+      defaults: { last_watched_second: last_watched_second || 0 },
+    });
+
+    if (!created) {
+      progress.last_watched_second = last_watched_second || 0;
+      await progress.save();
+    }
+
+    res.status(200).json({ message: "Progress updated", progress });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAllCourses,
   getCourseDetail,
@@ -311,4 +377,5 @@ module.exports = {
   getEnrolledCourseDetail,
   getLessonDetail,
   markLessonComplete,
+  updateLessonProgress,
 };

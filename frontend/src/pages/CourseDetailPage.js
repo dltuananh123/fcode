@@ -1,16 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Box,
+  Card,
+  CardMedia,
+  CardContent,
+  Button,
+  Avatar,
+  Chip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
+import {
+  ExpandMore,
+  PlayCircle,
+  Description,
+  Person,
+  School,
+} from "@mui/icons-material";
+import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
 import { getCourseById, enrollCourse, getEnrolledCourse } from "../services/courseService";
 
 const CourseDetailPage = () => {
-  const { id } = useParams(); // Get ID from URL (e.g. /course/1 -> id = 1)
+  const { id } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [checkingEnrollment, setCheckingEnrollment] = useState(true);
+  const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
 
-  // Check if user is already enrolled
   useEffect(() => {
     const checkEnrollment = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -19,7 +51,6 @@ const CourseDetailPage = () => {
           await getEnrolledCourse(id);
           setIsEnrolled(true);
         } catch (error) {
-          // User is not enrolled, that's fine
           setIsEnrolled(false);
         }
       }
@@ -27,25 +58,6 @@ const CourseDetailPage = () => {
     };
     checkEnrollment();
   }, [id]);
-
-  const handleEnroll = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      alert("You need to login to enroll in this course!");
-      return;
-    }
-
-    if (window.confirm("Are you sure you want to enroll in this course?")) {
-      try {
-        await enrollCourse(id);
-        alert("Enrollment successful! Good luck.");
-        setIsEnrolled(true);
-        navigate(`/course/${id}/lessons`);
-      } catch (error) {
-        alert(error.message || "Enrollment failed");
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -56,137 +68,210 @@ const CourseDetailPage = () => {
     fetchDetail();
   }, [id]);
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
-  if (!course)
+  const handleEnroll = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    setEnrolling(true);
+    try {
+      await enrollCourse(id);
+      setIsEnrolled(true);
+      setEnrollDialogOpen(false);
+      navigate(`/course/${id}/lessons`);
+    } catch (error) {
+      alert(error.message || "Enrollment failed");
+    } finally {
+      setEnrolling(false);
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="text-center mt-5 text-danger">Course not found!</div>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  if (!course) {
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Alert severity="error">Course not found!</Alert>
+      </Container>
+    );
+  }
+
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    return `${mins} phút`;
+  };
 
   return (
-    <div className="container mt-4">
-      {/* Course Header */}
-      <div className="row">
-        <div className="col-md-8">
-          <h1 className="fw-bold">{course.title}</h1>
-          <p className="lead">{course.description}</p>
-          <div className="d-flex align-items-center mb-3">
-            <img
-              src={
-                course.teacher?.avatar_url || "https://via.placeholder.com/50"
-              }
-              alt="GV"
-              className="rounded-circle me-2"
-              style={{ width: "50px", height: "50px" }}
-            />
-            <div>
-              <strong>Teacher: {course.teacher?.full_name}</strong>
-              <div className="text-muted small">{course.teacher?.bio}</div>
-            </div>
-          </div>
-        </div>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 500 }}>
+            {course.title}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            {course.description}
+          </Typography>
 
-        {/* Right column (Price & Buy button) */}
-        <div className="col-md-4">
-          <div className="card shadow-sm">
-            <img
-              src={course.thumbnail_url}
-              className="card-img-top"
-              alt="Course"
-            />
-            <div className="card-body">
-              <h3 className="text-primary fw-bold text-center">
-                {course.price === 0 || course.price === "0.00"
-                  ? "Free"
-                  : parseInt(course.price).toLocaleString() + " $"}
-              </h3>
-              {checkingEnrollment ? (
-                <button className="btn btn-secondary w-100 btn-lg mt-3" disabled>
-                  Checking...
-                </button>
-              ) : isEnrolled ? (
-                <Link
-                  to={`/course/${id}/lessons`}
-                  className="btn btn-success w-100 btn-lg mt-3"
-                >
-                  <i className="bi bi-play-circle me-2"></i>
-                  Go to Lessons
-                </Link>
-              ) : (
-                <button
-                  className="btn btn-primary w-100 btn-lg mt-3"
-                  onClick={handleEnroll}
-                >
-                  Enroll now
-                </button>
-              )}
-              <ul className="list-group list-group-flush mt-3">
-                <li className="list-group-item">Level: {course.level}</li>
-                <li className="list-group-item">
-                  Total chapters: {course.chapters?.length || 0}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Curriculum */}
-      <div className="row mt-5">
-        <div className="col-md-8">
-          <h3 className="mb-3">Course content</h3>
-          <div className="accordion" id="accordionChapters">
-            {course.chapters &&
+          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Avatar
+              src={course.teacher?.avatar_url}
+              sx={{ width: 56, height: 56, mr: 2 }}
+            >
+              <Person />
+            </Avatar>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                Giảng viên: {course.teacher?.full_name || "Admin"}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {course.teacher?.bio || "Chuyên gia trong lĩnh vực"}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
+              Nội dung khóa học
+            </Typography>
+            {course.chapters && course.chapters.length > 0 ? (
               course.chapters.map((chapter, index) => (
-                <div className="accordion-item" key={chapter.chapter_id}>
-                  <h2 className="accordion-header" id={`heading${index}`}>
-                    <button
-                      className="accordion-button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#collapse${index}`}
-                      aria-expanded="true"
-                    >
-                      <strong>{chapter.title}</strong>
-                    </button>
-                  </h2>
-                  <div
-                    id={`collapse${index}`}
-                    className="accordion-collapse collapse show"
-                  >
-                    <div className="accordion-body p-0">
-                      <ul className="list-group list-group-flush">
-                        {chapter.lessons &&
-                          chapter.lessons.map((lesson) => (
-                            <li
-                              key={lesson.lesson_id}
-                              className="list-group-item d-flex justify-content-between align-items-center"
-                            >
-                              <span>
-                                <i
-                                  className={`bi ${lesson.content_type === "video"
-                                    ? "bi-play-circle-fill"
-                                    : "bi-file-text"
-                                    } me-2`}
-                                ></i>
-                                {lesson.title}
-                              </span>
-                              <span className="badge bg-secondary rounded-pill">
-                                {Math.floor(lesson.duration_seconds / 60)}{" "}
-                                minutes
-                              </span>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-      <div className="mb-5"></div> {/* Bottom margin */}
-    </div>
+                <Accordion key={chapter.chapter_id} defaultExpanded={index === 0}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography sx={{ fontWeight: 500 }}>{chapter.title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <List>
+                      {chapter.lessons &&
+                        chapter.lessons.map((lesson) => (
+                          <ListItem key={lesson.lesson_id}>
+                            {lesson.content_type === "video" ? (
+                              <PlayCircle sx={{ mr: 1, color: "primary.main" }} />
+                            ) : (
+                              <Description sx={{ mr: 1, color: "text.secondary" }} />
+                            )}
+                            <ListItemText
+                              primary={lesson.title}
+                              secondary={formatDuration(lesson.duration_seconds)}
+                            />
+                          </ListItem>
+                        ))}
+                    </List>
+                  </AccordionDetails>
+                </Accordion>
+              ))
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                Chưa có nội dung
+              </Typography>
+            )}
+          </Box>
+        </Box>
+
+        <Box sx={{ width: { xs: "100%", md: "350px" } }}>
+          <Card elevation={3}>
+            <CardMedia
+              component="img"
+              height="200"
+              image={course.thumbnail_url}
+              alt={course.title}
+            />
+            <CardContent>
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "center",
+                  mb: 2,
+                  fontWeight: 600,
+                  color: "primary.main",
+                }}
+              >
+                {course.price === 0 || course.price === "0.00"
+                  ? "Miễn phí"
+                  : `${parseInt(course.price).toLocaleString()} đ`}
+              </Typography>
+
+              {checkingEnrollment ? (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  disabled
+                  sx={{ mb: 2, py: 1.5 }}
+                >
+                  <CircularProgress size={20} sx={{ mr: 1 }} />
+                  Đang kiểm tra...
+                </Button>
+              ) : isEnrolled ? (
+                <Button
+                  component={RouterLink}
+                  to={`/course/${id}/lessons`}
+                  fullWidth
+                  variant="contained"
+                  color="success"
+                  startIcon={<School />}
+                  sx={{ mb: 2, py: 1.5 }}
+                >
+                  Vào học ngay
+                </Button>
+              ) : (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => setEnrollDialogOpen(true)}
+                  sx={{ mb: 2, py: 1.5 }}
+                >
+                  Đăng ký khóa học
+                </Button>
+              )}
+
+              <Box sx={{ mt: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Cấp độ:
+                  </Typography>
+                  <Chip label={course.level || "Beginner"} size="small" />
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Số chương:
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    {course.chapters?.length || 0}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+
+      <Dialog open={enrollDialogOpen} onClose={() => setEnrollDialogOpen(false)}>
+        <DialogTitle>Xác nhận đăng ký</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Bạn có chắc chắn muốn đăng ký khóa học này không?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEnrollDialogOpen(false)}>Hủy</Button>
+          <Button
+            onClick={handleEnroll}
+            variant="contained"
+            disabled={enrolling}
+          >
+            {enrolling ? <CircularProgress size={20} /> : "Xác nhận"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
 export default CourseDetailPage;
-

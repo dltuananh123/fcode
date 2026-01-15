@@ -1,55 +1,122 @@
 import React from "react";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  Chip,
+  Box,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import SchoolIcon from "@mui/icons-material/School";
 
 const CourseCard = ({ course }) => {
-  // If no image, use default image
-  const defaultImg = "https://files.fullstack.edu.vn/f8-prod/courses/13/13.png";
+  const defaultImg =
+    "https://files.fullstack.edu.vn/f8-prod/courses/13/13.png";
+
+  const getLevelColor = (level) => {
+    switch (level?.toLowerCase()) {
+      case "beginner":
+        return "success";
+      case "intermediate":
+        return "warning";
+      case "advanced":
+        return "error";
+      default:
+        return "default";
+    }
+  };
 
   return (
-    <div className="col-md-4 mb-4">
-      <div className="card h-100 shadow-sm">
-        <img
-          src={course.thumbnail_url || defaultImg}
-          className="card-img-top"
-          alt={course.title}
-          style={{ height: "200px", objectFit: "cover" }}
-        />
-        <div className="card-body d-flex flex-column">
-          <h5 className="card-title">{course.title}</h5>
-          <p className="card-text text-muted" style={{ fontSize: "0.9rem" }}>
-            {course.description
-              ? course.description.substring(0, 100) + "..."
-              : ""}
-          </p>
-
-          <div className="mt-auto">
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <span className="badge bg-info text-dark">
-                {course.level || "Beginner"}
-              </span>
-              <span className="fw-bold text-primary">
-                {course.price === 0 || course.price === "0.00"
-                  ? "Free"
-                  : parseInt(course.price).toLocaleString() + " $"}
-              </span>
-            </div>
-
-            <div className="d-flex align-items-center mb-3">
-              <small className="text-muted">
-                Teacher: {course.teacher ? course.teacher.full_name : "Admin"}
-              </small>
-            </div>
-
-            <Link
-              to={`/course/${course.course_id}`}
-              className="btn btn-outline-primary w-100"
-            >
-              View details
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: 6,
+        },
+      }}
+    >
+      <CardMedia
+        component="img"
+        height="200"
+        image={course.thumbnail_url || defaultImg}
+        alt={course.title}
+        sx={{ objectFit: "cover" }}
+      />
+      <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
+          <Chip
+            label={course.level || "Beginner"}
+            color={getLevelColor(course.level)}
+            size="small"
+            sx={{ fontWeight: 500 }}
+          />
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: course.price === 0 || course.price === "0.00" ? "success.main" : "primary.main",
+            }}
+          >
+            {course.price === 0 || course.price === "0.00"
+              ? "Miễn phí"
+              : `${parseInt(course.price).toLocaleString()} đ`}
+          </Typography>
+        </Box>
+        <Typography
+          variant="h6"
+          component="h2"
+          sx={{
+            fontWeight: 500,
+            mb: 1,
+            minHeight: "60px",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {course.title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            mb: 2,
+            flexGrow: 1,
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {course.description || "Khóa học chất lượng cao"}
+        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <SchoolIcon sx={{ fontSize: 18, mr: 0.5, color: "text.secondary" }} />
+          <Typography variant="caption" color="text.secondary">
+            {course.teacher ? course.teacher.full_name : "Admin"}
+          </Typography>
+        </Box>
+      </CardContent>
+      <CardActions sx={{ p: 2, pt: 0 }}>
+        <Button
+          component={Link}
+          to={`/course/${course.course_id}`}
+          variant="contained"
+          fullWidth
+          sx={{ py: 1 }}
+        >
+          Xem Chi Tiết
+        </Button>
+      </CardActions>
+    </Card>
   );
 };
 

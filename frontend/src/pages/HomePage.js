@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  Grid,
+  Box,
+  CircularProgress,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { getAllCourses } from "../services/courseService";
 import CourseCard from "../components/CourseCard";
-import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Lấy thông tin user từ LocalStorage để hiện lời chào
   const user = JSON.parse(localStorage.getItem("user"))?.user;
 
   useEffect(() => {
@@ -26,46 +35,76 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      {/* Header đơn giản */}
-      <nav className="navbar navbar-light bg-light px-4 mb-4 shadow-sm">
-        <span className="navbar-brand mb-0 h1 fw-bold text-primary">
-          F-Code Learning
-        </span>
-        <div className="d-flex align-items-center">
-          <span className="me-3">
-            Xin chào, <b>{user ? user.full_name : "Khách"}</b>
-          </span>
-          <button onClick={handleLogout} className="btn btn-sm btn-danger">
+    <Box sx={{ flexGrow: 1, minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
+      <AppBar position="static" elevation={2}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 500 }}>
+            🎓 F-Code Learning
+          </Typography>
+          <Typography variant="body1" sx={{ mr: 2, display: { xs: "none", sm: "block" } }}>
+            Xin chào, <strong>{user ? user.full_name : "Khách"}</strong>
+          </Typography>
+          <Button
+            color="inherit"
+            onClick={handleLogout}
+            variant="outlined"
+            sx={{
+              borderColor: "rgba(255, 255, 255, 0.5)",
+              color: "white",
+              "&:hover": {
+                borderColor: "white",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+            }}
+          >
             Đăng xuất
-          </button>
-        </div>
-      </nav>
+          </Button>
+        </Toolbar>
+      </AppBar>
 
-      {/* Nội dung chính */}
-      <div className="container">
-        <h2 className="mb-4 text-center fw-bold">Danh Sách Khóa Học Nổi Bật</h2>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box sx={{ textAlign: "center", mb: 5 }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            sx={{
+              mb: 2,
+              fontWeight: 500,
+              color: "primary.main",
+            }}
+          >
+            Khóa Học Nổi Bật
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Khám phá các khóa học chất lượng cao được giảng dạy bởi các chuyên gia
+          </Typography>
+        </Box>
 
         {loading ? (
-          <div className="text-center mt-5">
-            <div className="spinner-border text-primary" role="status"></div>
-            <p>Đang tải khóa học...</p>
-          </div>
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+            <CircularProgress />
+          </Box>
         ) : (
-          <div className="row">
+          <Grid container spacing={3}>
             {courses.length > 0 ? (
               courses.map((course) => (
-                <CourseCard key={course.course_id} course={course} />
+                <Grid item xs={12} sm={6} md={4} key={course.course_id}>
+                  <CourseCard course={course} />
+                </Grid>
               ))
             ) : (
-              <p className="text-center text-muted">
-                Chưa có khóa học nào được đăng tải.
-              </p>
+              <Grid item xs={12}>
+                <Box sx={{ textAlign: "center", py: 5 }}>
+                  <Typography variant="body1" color="text.secondary">
+                    Chưa có khóa học nào được đăng tải.
+                  </Typography>
+                </Box>
+              </Grid>
             )}
-          </div>
+          </Grid>
         )}
-      </div>
-    </div>
+      </Container>
+    </Box>
   );
 };
 
