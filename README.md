@@ -7,6 +7,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
+![Material-UI](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=mui&logoColor=white)
 
 ---
 
@@ -23,16 +24,30 @@
 
 ## Features
 
-| Feature                | Description                                |
-| ---------------------- | ------------------------------------------ |
-| **Authentication**     | Register, Login with JWT token             |
-| **User Roles**         | Student, Teacher, Admin                    |
-| **Course Management**  | Create, edit, delete courses               |
-| **Chapters & Lessons** | Organize content with chapters and lessons |
-| **Video Lessons**      | Support video, document, and quiz content  |
-| **Progress Tracking**  | Track lesson completion and watch time     |
-| **Reviews & Ratings**  | Rate and review courses                    |
-| **Real-time Chat**     | Live messaging with Socket.io              |
+### Core Features
+
+| Feature                | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| **Authentication**     | Secure register & login with JWT token          |
+| **User Roles**         | Student, Teacher, Admin with role-based access   |
+| **Course Management**  | Full CRUD operations for courses                 |
+| **Chapters & Lessons** | Hierarchical content organization                |
+| **Video Lessons**      | Support for video, document, and quiz content    |
+| **Progress Tracking**  | Real-time lesson completion and watch time       |
+| **Reviews & Ratings**  | Course rating system with comments               |
+| **Real-time Chat**     | Live messaging between users with Socket.io      |
+
+### Advanced Features
+
+| Feature                  | Description                                    |
+| ------------------------ | ---------------------------------------------- |
+| **User Profiles**        | Customizable profiles with avatar & bio        |
+| **Course Enrollment**    | Enroll in courses and track your learning      |
+| **Teacher Dashboard**    | Manage courses, chapters, and lessons          |
+| **Responsive Design**    | Mobile-first design with Material-UI           |
+| **Access Control**       | Role-based authorization for protected routes  |
+| **Default Thumbnails**   | Automatic fallback for course thumbnails       |
+| **Interactive UI**       | Modern, animated components with smooth UX     |
 
 ---
 
@@ -40,21 +55,28 @@
 
 ### Backend
 
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **ORM:** Sequelize
-- **Database:** MySQL
+- **Runtime:** Node.js (v18+)
+- **Framework:** Express.js 5
+- **ORM:** Sequelize 6
+- **Database:** MySQL 2
 - **Authentication:** JWT (jsonwebtoken)
 - **Password Hashing:** bcryptjs
-- **Real-time:** Socket.io
+- **Real-time:** Socket.io 4
+- **Environment:** dotenv
+- **CORS:** cors middleware
+- **Dev Tools:** nodemon
 
 ### Frontend
 
-- **Library:** React 18
-- **Routing:** React Router DOM
-- **UI Framework:** Bootstrap 5
+- **Library:** React 19
+- **Routing:** React Router DOM 7
+- **UI Framework:** Material-UI (MUI) 7
+- **Icons:** Material Icons, Lucide React
+- **Styling:** Bootstrap 5 + Custom CSS
 - **HTTP Client:** Axios
-- **Real-time:** Socket.io-client
+- **Real-time:** Socket.io-client 4
+- **State Management:** React Hooks
+- **Testing:** React Testing Library
 
 ---
 
@@ -63,15 +85,17 @@
 ```
 fcode/
 ├── backend/
-│   ├── server.js                 # Entry point
+│   ├── server.js                 # Entry point with Socket.io
 │   ├── package.json
+│   ├── .env                      # Environment variables
 │   └── src/
 │       ├── config/
 │       │   └── connectDB.js      # Sequelize database connection
 │       ├── controllers/
 │       │   ├── authController.js     # Login, Register logic
-│       │   ├── courseController.js   # CRUD courses, enroll
-│       │   └── chatController.js     # Get chat history
+│       │   ├── courseController.js   # CRUD courses, enroll, chapters, lessons
+│       │   ├── chatController.js     # Get chat history
+│       │   └── reviewController.js   # Course reviews & ratings
 │       ├── middlewares/
 │       │   └── authMiddleware.js     # JWT token verification
 │       ├── models/
@@ -84,30 +108,42 @@ fcode/
 │       │   ├── LessonProgress.js
 │       │   ├── Review.js
 │       │   ├── Message.js
-│       │   └── index.js
+│       │   └── index.js              # Model associations
 │       └── routes/
-│           ├── auth.js           # /api/auth/*
-│           ├── course.js         # /api/courses/*
-│           └── chat.js           # /api/chat/*
-│
+│           ├── auth.js               # /api/auth/*
+│           ├── course.js             # /api/courses/*
+│           ├── chat.js               # /api/chat/*
+│           └── review.js             # /api/reviews/* 
 ├── frontend/
-│   ├── package.json
-│   ├── public/
-│   └── src/
-│       ├── App.js
-│       ├── components/
-│       │   ├── CourseCard.js
-│       │   └── ChatBox.js
-│       ├── pages/
-│       │   ├── LoginPage.js
-│       │   ├── RegisterPage.js
-│       │   ├── HomePage.js
-│       │   └── CourseDetailPage.js
-│       └── services/
-│           ├── authService.js    # Auth API calls
-│           └── courseService.js  # Course API calls
-│
-└── README.md
+    ├── package.json
+    ├── public/
+    │   ├── index.html
+    │   └── thumbnail.png         # Default course thumbnail
+    └── src/
+        ├── App.js                # Main app with routing
+        ├── index.js
+        ├── index.css
+        ├── theme.js              # Material-UI theme configuration
+        ├── components/
+        │   ├── Header.js         # Navigation bar with auth
+        │   ├── Footer.js         # Footer with links
+        │   ├── CourseCard.js     # Course display card
+        │   └── ChatBox.js        # Real-time chat component
+        ├── pages/
+        │   ├── HomePage.js           # Landing page with course list
+        │   ├── LoginPage.js          # User login
+        │   ├── RegisterPage.js       # User registration
+        │   ├── CourseDetailPage.js   # Course info, reviews, enroll
+        │   ├── CourseLessonsPage.js  # Course curriculum view
+        │   ├── LessonPage.js         # Video player & lesson content
+        │   ├── CreateCoursePage.js   # Teacher course creation
+        │   ├── ProfilePage.js        # User profile & enrolled courses
+        │   └── AccessDeniedPage.js   # 403 error page
+        └── services/
+            ├── authService.js    # Auth API calls
+            ├── courseService.js  # Course API calls
+            └── reviewService.js  # Review API calls
+
 ```
 
 ---
@@ -116,9 +152,10 @@ fcode/
 
 ### Prerequisites
 
-- Node.js (v18+)
-- MySQL Server
-- npm or yarn
+- **Node.js** (v18 or higher)
+- **MySQL Server** (v8.0 or higher)
+- **npm** or **yarn** package manager
+- **Git** (for cloning the repository)
 
 ### 1. Clone the repository
 
@@ -127,22 +164,39 @@ git clone https://github.com/dltuananh123/fcode.git
 cd fcode
 ```
 
-### 2. Backend Setup
+### 2. Database Setup
+
+Create a new MySQL database:
+
+```sql
+CREATE DATABASE fcode_db;
+```
+
+Optionally, run the schema file:
+
+```bash
+mysql -u root -p fcode_db < fcode_db.sql
+```
+
+### 3. Backend Setup
+
+Navigate to the backend directory and install dependencies:
 
 ```bash
 cd backend
 npm install
 ```
 
-Create `.env` file in `backend/` folder:
+Create a `.env` file in the `backend/` folder:
 
 ```env
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=your_password
+DB_PASSWORD=your_mysql_password
 DB_NAME=fcode_db
 DB_DIALECT=mysql
 PORT=8080
+JWT_SECRET=your_secret_key_here
 ```
 
 Start the backend server:
@@ -151,21 +205,46 @@ Start the backend server:
 npm start
 ```
 
-> **Note:** On first run, change `server.js` to `sync({ force: true })` to create fresh tables. After that, switch back to `sync({ alter: true })` to preserve data.
+> **Note:** On first run, the database tables will be created automatically using Sequelize sync. The server will run on `http://localhost:8080`
 
-### 3. Frontend Setup
+### 4. Frontend Setup
+
+Open a new terminal, navigate to the frontend directory and install dependencies:
 
 ```bash
 cd frontend
 npm install
+```
+
+Start the React development server:
+
+```bash
 npm start
 ```
 
-The app will be available at `http://localhost:3000`
+The app will automatically open at `http://localhost:3000`
 
-### 4. Seed Sample Data (Optional)
+### 5. Seed Sample Data (Optional)
 
-Run `seed_data_sample.sql` in MySQL Workbench to populate sample data.
+To populate the database with sample data for testing:
+
+```bash
+mysql -u root -p fcode_db < seed_data_sample.sql
+```
+
+This will create:
+- Sample users (students, teachers, admin)
+- Sample courses with chapters and lessons
+- Sample enrollments and reviews
+
+### 6. Default Login Credentials (After Seeding)
+
+After running the seed data, you can use these credentials:
+
+- **Student:** `student@example.com` / `password123`
+- **Teacher:** `teacher@example.com` / `password123`
+- **Admin:** `admin@example.com` / `password123`
+
 
 ---
 
@@ -363,32 +442,57 @@ CREATE TABLE Messages (
 
 ### Authentication
 
-| Method | Endpoint             | Description             |
-| ------ | -------------------- | ----------------------- |
-| `POST` | `/api/auth/register` | Register new user       |
-| `POST` | `/api/auth/login`    | Login and get JWT token |
+| Method | Endpoint             | Description             | Auth Required |
+| ------ | -------------------- | ----------------------- | ------------- |
+| `POST` | `/api/auth/register` | Register new user       | No            |
+| `POST` | `/api/auth/login`    | Login and get JWT token | No            |
 
 ### Courses
 
-| Method | Endpoint              | Description        |
-| ------ | --------------------- | ------------------ |
-| `GET`  | `/api/courses`        | Get all courses    |
-| `GET`  | `/api/courses/:id`    | Get course by ID   |
-| `POST` | `/api/courses`        | Create new course  |
-| `POST` | `/api/courses/enroll` | Enroll in a course |
+| Method   | Endpoint                           | Description                  | Auth Required |
+| -------- | ---------------------------------- | ---------------------------- | ------------- |
+| `GET`    | `/api/courses`                     | Get all courses              | No            |
+| `GET`    | `/api/courses/:id`                 | Get course by ID             | No            |
+| `POST`   | `/api/courses`                     | Create new course            | Yes (Teacher) |
+| `PUT`    | `/api/courses/:id`                 | Update course                | Yes (Teacher) |
+| `DELETE` | `/api/courses/:id`                 | Delete course                | Yes (Teacher) |
+| `POST`   | `/api/courses/enroll`              | Enroll in a course           | Yes           |
+| `GET`    | `/api/courses/:id/chapters`        | Get course chapters          | No            |
+| `POST`   | `/api/courses/:id/chapters`        | Create chapter               | Yes (Teacher) |
+| `PUT`    | `/api/courses/chapters/:chapterId` | Update chapter               | Yes (Teacher) |
+| `DELETE` | `/api/courses/chapters/:chapterId` | Delete chapter               | Yes (Teacher) |
+| `POST`   | `/api/courses/chapters/:id/lessons`| Create lesson                | Yes (Teacher) |
+| `PUT`    | `/api/courses/lessons/:lessonId`   | Update lesson                | Yes (Teacher) |
+| `DELETE` | `/api/courses/lessons/:lessonId`   | Delete lesson                | Yes (Teacher) |
+| `GET`    | `/api/courses/my-courses`          | Get user's enrolled courses  | Yes           |
+
+### Reviews
+
+| Method   | Endpoint                    | Description              | Auth Required |
+| -------- | --------------------------- | ------------------------ | ------------- |
+| `GET`    | `/api/reviews/course/:id`   | Get course reviews       | No            |
+| `POST`   | `/api/reviews`              | Create/update review     | Yes           |
+| `DELETE` | `/api/reviews/:id`          | Delete review            | Yes           |
 
 ### Chat
 
-| Method | Endpoint    | Description      |
-| ------ | ----------- | ---------------- |
-| `GET`  | `/api/chat` | Get chat history |
+| Method | Endpoint    | Description      | Auth Required |
+| ------ | ----------- | ---------------- | ------------- |
+| `GET`  | `/api/chat` | Get chat history | Yes           |
+
+### User Profile
+
+| Method | Endpoint              | Description        | Auth Required |
+| ------ | --------------------- | ------------------ | ------------- |
+| `GET`  | `/api/auth/profile`   | Get user profile   | Yes           |
+| `PUT`  | `/api/auth/profile`   | Update profile     | Yes           |
 
 ### Socket.io Events
 
-| Event             | Direction       | Description          |
-| ----------------- | --------------- | -------------------- |
-| `send_message`    | Client → Server | Send a chat message  |
-| `receive_message` | Server → Client | Receive chat message |
+| Event             | Direction       | Description          | Payload                          |
+| ----------------- | --------------- | -------------------- | -------------------------------- |
+| `send_message`    | Client → Server | Send a chat message  | `{ receiverId, content }`        |
+| `receive_message` | Server → Client | Receive chat message | `{ senderId, content, timestamp }`|
 
 ---
 
