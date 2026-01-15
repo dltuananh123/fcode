@@ -17,11 +17,7 @@ import {
   Chip,
   CircularProgress,
   Alert,
-  Breadcrumbs,
-  Link,
   Avatar,
-  AppBar,
-  Toolbar,
   Button,
 } from "@mui/material";
 import {
@@ -29,9 +25,10 @@ import {
   CheckCircle,
   PlayCircle,
   Description,
-  Home,
   Person,
 } from "@mui/icons-material";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
 import { getEnrolledCourse } from "../services/courseService";
 
@@ -47,6 +44,11 @@ const CourseLessonsPage = () => {
       try {
         const data = await getEnrolledCourse(id);
         setCourse(data);
+        if (data) {
+          document.title = `${data.title} - Bài học - F-Code Learning`;
+        } else {
+          document.title = "Bài học - F-Code Learning";
+        }
         setLoading(false);
       } catch (err) {
         setError(err.message || "Failed to load course");
@@ -112,24 +114,11 @@ const CourseLessonsPage = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
-      <AppBar position="static" elevation={2}>
-        <Toolbar>
-          <Breadcrumbs aria-label="breadcrumb" sx={{ color: "white" }}>
-            <Link
-              component={RouterLink}
-              to="/"
-              sx={{ color: "rgba(255, 255, 255, 0.7)", textDecoration: "none", display: "flex", alignItems: "center" }}
-            >
-              <Home sx={{ mr: 0.5, fontSize: 20 }} />
-              Trang chủ
-            </Link>
-            <Typography sx={{ color: "white" }}>{course.title}</Typography>
-          </Breadcrumbs>
-        </Toolbar>
-      </AppBar>
+    <>
+      <Header />
+      <Box sx={{ flexGrow: 1, minHeight: "calc(100vh - 200px)", backgroundColor: "#FCFCFC", display: "flex", flexDirection: "column" }}>
 
-      <Box sx={{ bgcolor: "primary.main", color: "white", py: 4 }}>
+      <Box sx={{ bgcolor: "grey.900", color: "white", py: 4 }}>
         <Container>
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Avatar
@@ -153,7 +142,7 @@ const CourseLessonsPage = () => {
                 </Typography>
                 <Chip label={`${progress}%`} color="primary" />
               </Box>
-              <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: 4 }} />
+              <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: 8 }} />
             </CardContent>
           </Card>
         </Container>
@@ -228,7 +217,9 @@ const CourseLessonsPage = () => {
           <Alert severity="info">Chưa có nội dung</Alert>
         )}
       </Container>
-    </Box>
+      </Box>
+      <Footer />
+    </>
   );
 };
 

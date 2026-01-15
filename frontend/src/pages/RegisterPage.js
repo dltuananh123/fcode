@@ -8,9 +8,10 @@ import {
   Box,
   Alert,
   Link,
-  MenuItem,
   CircularProgress,
+  Grid,
 } from "@mui/material";
+import { GraduationCap, User } from "lucide-react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { registerUser } from "../services/authService";
 
@@ -24,6 +25,10 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    document.title = "Đăng ký - F-Code Learning";
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,7 +55,6 @@ const RegisterPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
         padding: 2,
       }}
     >
@@ -64,6 +68,15 @@ const RegisterPage = () => {
             alignItems: "center",
           }}
         >
+          <Box
+            component="img"
+            src="/fcode.png"
+            alt="F-Code Learning"
+            sx={{
+              height: 60,
+              mb: 2,
+            }}
+          />
           <Typography
             component="h1"
             variant="h4"
@@ -85,7 +98,11 @@ const RegisterPage = () => {
             </Alert>
           )}
 
-          <Box component="form" onSubmit={handleRegister} sx={{ width: "100%" }}>
+          <Box
+            component="form"
+            onSubmit={handleRegister}
+            sx={{ width: "100%" }}
+          >
             <TextField
               margin="normal"
               required
@@ -124,21 +141,145 @@ const RegisterPage = () => {
               onChange={handleChange}
               variant="outlined"
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              select
-              id="role"
-              label="Vai trò"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              variant="outlined"
-            >
-              <MenuItem value="student">Học sinh</MenuItem>
-              <MenuItem value="teacher">Giáo viên</MenuItem>
-            </TextField>
+            <Box sx={{ mt: 2, mb: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 1.5,
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                  textAlign: "center",
+                }}
+              >
+                Bạn là <span style={{ color: "#d32f2f" }}>*</span>
+              </Typography>
+              <Grid container spacing={2} justifyContent="center">
+                <Grid
+                  item
+                  xs={6}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box
+                    onClick={() =>
+                      setFormData({ ...formData, role: "student" })
+                    }
+                    sx={{
+                      p: 2,
+                      border: 2,
+                      borderRadius: "4px",
+                      borderColor:
+                        formData.role === "student"
+                          ? "primary.main"
+                          : "grey.300",
+                      bgcolor:
+                        formData.role === "student"
+                          ? "rgba(0, 155, 100, 0.1)"
+                          : "transparent",
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        bgcolor:
+                          formData.role === "student"
+                            ? "rgba(0, 155, 100, 0.1)"
+                            : "action.hover",
+                      },
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 1,
+                      width: "100%",
+                      maxWidth: 220,
+                      minHeight: 110,
+                    }}
+                  >
+                    <GraduationCap
+                      size={32}
+                      color={
+                        formData.role === "student" ? "#009B64" : "#757575"
+                      }
+                    />
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: formData.role === "student" ? 600 : 400,
+                        color:
+                          formData.role === "student"
+                            ? "primary.main"
+                            : "text.secondary",
+                      }}
+                    >
+                      Học viên
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box
+                    onClick={() =>
+                      setFormData({ ...formData, role: "teacher" })
+                    }
+                    sx={{
+                      p: 2,
+                      border: 2,
+                      borderRadius: "4px",
+                      borderColor:
+                        formData.role === "teacher"
+                          ? "primary.main"
+                          : "grey.300",
+                      bgcolor:
+                        formData.role === "teacher"
+                          ? "rgba(0, 155, 100, 0.1)"
+                          : "transparent",
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        bgcolor:
+                          formData.role === "teacher"
+                            ? "rgba(0, 155, 100, 0.1)"
+                            : "action.hover",
+                      },
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 1,
+                      width: "100%",
+                      maxWidth: 220,
+                      minHeight: 110,
+                    }}
+                  >
+                    <User
+                      size={32}
+                      color={
+                        formData.role === "teacher" ? "#009B64" : "#757575"
+                      }
+                    />
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: formData.role === "teacher" ? 600 : 400,
+                        color:
+                          formData.role === "teacher"
+                            ? "primary.main"
+                            : "text.secondary",
+                      }}
+                    >
+                      Giảng viên
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
             <Button
               type="submit"
               fullWidth
@@ -147,7 +288,11 @@ const RegisterPage = () => {
               sx={{ mt: 3, mb: 2, py: 1.5 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Đăng Ký"}
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Đăng Ký"
+              )}
             </Button>
           </Box>
 

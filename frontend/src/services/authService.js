@@ -26,3 +26,30 @@ export const loginUser = async (credentials) => {
 export const logoutUser = () => {
   localStorage.removeItem("user");
 };
+
+export const logout = logoutUser;
+
+export const updateProfile = async (profileData) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.put(`${API_URL}/profile`, profileData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Update local storage with new user data
+    if (response.data.user) {
+      const currentUser = JSON.parse(localStorage.getItem("user"));
+      currentUser.user = {
+        ...currentUser.user,
+        ...response.data.user,
+      };
+      localStorage.setItem("user", JSON.stringify(currentUser));
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : { message: "Lỗi server" };
+  }
+};

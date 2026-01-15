@@ -96,3 +96,80 @@ export const markLessonComplete = async (lessonId) => {
   }
 };
 
+export const getMyEnrolledCourses = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.get(`${API_URL}/my-enrolled`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error when getting enrolled courses:", error);
+    return [];
+  }
+};
+
+export const getMyCourses = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.get(`${API_URL}/my-courses`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error when getting my courses:", error);
+    return [];
+  }
+};
+
+export const deleteCourse = async (courseId) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.delete(`${API_URL}/${courseId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};
+
+export const createCourse = async (courseData) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.post(`${API_URL}/create`, courseData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};
+
+export const updateCourse = async (courseId, courseData) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    const response = await axios.put(`${API_URL}/${courseId}`, courseData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response
+      ? error.response.data
+      : { message: "Connection error" };
+  }
+};

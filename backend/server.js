@@ -8,6 +8,7 @@ const { connectDB } = require("./src/config/connectDB");
 const { sequelize } = require("./src/models/index");
 const authRoutes = require("./src/routes/auth");
 const courseRoutes = require("./src/routes/course");
+const reviewRoutes = require("./src/routes/review");
 const { Message } = require("./src/models/index");
 
 const chatRoutes = require("./src/routes/chat");
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
   res.send("F-Code Server Started");

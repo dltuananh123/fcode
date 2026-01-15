@@ -370,6 +370,228 @@ const updateLessonProgress = async (req, res) => {
   }
 };
 
+// Create a new course (teacher only)
+const createCourse = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { title, description, thumbnail_url, price, level, category_id } = req.body;
+
+    // Check if user is a teacher
+    const user = await User.findByPk(userId);
+    if (user.role !== "teacher" && user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Only teachers can create courses" });
+    }
+
+    const course = await Course.create({
+      title,
+      description,
+      thumbnail_url: thumbnail_url || "/thumbnail.png",
+      price: price || 0,
+      level: level || "beginner",
+      teacher_id: userId,
+      category_id: category_id || null,
+    });
+
+    res.status(201).json(course);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when creating course" });
+  }
+};
+
+// Get enrolled courses for a user
+const getMyEnrolledCourses = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const enrollments = await Enrollment.findAll({
+      where: { user_id: userId },
+    });
+
+    const courseIds = enrollments.map((e) => e.course_id);
+
+    const courses = await Course.findAll({
+      where: { course_id: courseIds },
+      include: [
+        {
+          model: User,
+          as: "teacher",
+          attributes: ["full_name", "avatar_url"],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name"],
+        },
+      ],
+      order: [["created_at", "DESC"]],
+    });
+
+    res.status(200).json(courses);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when getting enrolled courses" });
+  }
+};
+
+// Get courses created by teacher
+const getMyCourses = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const courses = await Course.findAll({
+      where: { teacher_id: userId },
+      include: [
+        {
+          model: User,
+          as: "teacher",
+          attributes: ["full_name", "avatar_url"],
+        },
+        {
+          model: Chapter,
+          as: "chapters",
+          include: [
+            {
+              model: Lesson,
+              as: "lessons",
+            },
+          ],
+        },
+      ],
+      order: [["created_at", "DESC"]],
+    });
+
+    res.status(200).json(courses);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when getting my courses" });
+  }
+};
+
+// Delete a course (teacher only)
+const deleteCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const course = await Course.findByPk(id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Check if user is the teacher or admin
+    if (course.teacher_id !== userId) {
+      const user = await User.findByPk(userId);
+      if (user.role !== "admin") {
+        return res
+          .status(403)
+          .json({ message: "You can only delete your own courses" });
+      }
+    }
+
+    await course.destroy();
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when deleting course" });
+  }
+};
+
+// Update course with chapters and lessons
+const updateCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { title, description, thumbnail_url, price, level, chapters } = req.body;
+
+    const course = await Course.findByPk(id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Check if user is the teacher
+    if (course.teacher_id !== userId) {
+      const user = await User.findByPk(userId);
+      if (user.role !== "admin") {
+        return res
+          .status(403)
+          .json({ message: "You can only update your own courses" });
+      }
+    }
+
+    // Update course basic info
+    if (title) course.title = title;
+    if (description !== undefined) course.description = description;
+    if (thumbnail_url !== undefined) course.thumbnail_url = thumbnail_url;
+    if (price !== undefined) course.price = price;
+    if (level) course.level = level;
+    await course.save();
+
+    // Update chapters and lessons if provided
+    if (chapters && Array.isArray(chapters)) {
+      // Delete existing chapters and lessons
+      const existingChapters = await Chapter.findAll({
+        where: { course_id: id },
+      });
+      for (const chapter of existingChapters) {
+        await Lesson.destroy({ where: { chapter_id: chapter.chapter_id } });
+      }
+      await Chapter.destroy({ where: { course_id: id } });
+
+      // Create new chapters and lessons
+      for (let i = 0; i < chapters.length; i++) {
+        const chapterData = chapters[i];
+        const chapter = await Chapter.create({
+          course_id: id,
+          title: chapterData.title,
+          order_index: i + 1,
+        });
+
+        if (chapterData.lessons && Array.isArray(chapterData.lessons)) {
+          for (let j = 0; j < chapterData.lessons.length; j++) {
+            const lessonData = chapterData.lessons[j];
+            await Lesson.create({
+              chapter_id: chapter.chapter_id,
+              title: lessonData.title,
+              content_type: lessonData.content_type || "video",
+              video_url: lessonData.video_url || null,
+              content_text: lessonData.content_text || null,
+              duration_seconds: lessonData.duration_seconds || 0,
+              is_preview: lessonData.is_preview || false,
+              order_index: j + 1,
+            });
+          }
+        }
+      }
+    }
+
+    const updatedCourse = await Course.findByPk(id, {
+      include: [
+        {
+          model: Chapter,
+          as: "chapters",
+          include: [
+            {
+              model: Lesson,
+              as: "lessons",
+            },
+          ],
+          order: [["order_index", "ASC"]],
+        },
+      ],
+    });
+
+    res.status(200).json(updatedCourse);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when updating course" });
+  }
+};
+
 module.exports = {
   getAllCourses,
   getCourseDetail,
@@ -378,4 +600,9 @@ module.exports = {
   getLessonDetail,
   markLessonComplete,
   updateLessonProgress,
+  createCourse,
+  getMyEnrolledCourses,
+  getMyCourses,
+  deleteCourse,
+  updateCourse,
 };

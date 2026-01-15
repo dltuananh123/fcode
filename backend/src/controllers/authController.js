@@ -68,4 +68,38 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+// Update user profile
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { full_name, bio, avatar_url } = req.body;
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (full_name) user.full_name = full_name;
+    if (bio !== undefined) user.bio = bio;
+    if (avatar_url !== undefined) user.avatar_url = avatar_url;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user.user_id,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+        avatar_url: user.avatar_url,
+        bio: user.bio,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error when updating profile" });
+  }
+};
+
+module.exports = { register, login, updateProfile };

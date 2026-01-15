@@ -20,6 +20,10 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    document.title = "Đăng nhập - F-Code Learning";
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -41,7 +45,6 @@ const LoginPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         padding: 2,
       }}
     >
@@ -55,6 +58,15 @@ const LoginPage = () => {
             alignItems: "center",
           }}
         >
+          <Box
+            component="img"
+            src="/fcode.png"
+            alt="F-Code Learning"
+            sx={{
+              height: 60,
+              mb: 2,
+            }}
+          />
           <Typography
             component="h1"
             variant="h4"
@@ -64,7 +76,7 @@ const LoginPage = () => {
               color: "primary.main",
             }}
           >
-            F-Code Learning
+            Đăng Nhập
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Đăng nhập để tiếp tục học tập
@@ -110,7 +122,11 @@ const LoginPage = () => {
               sx={{ mt: 3, mb: 2, py: 1.5 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Đăng Nhập"}
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Đăng Nhập"
+              )}
             </Button>
           </Box>
 

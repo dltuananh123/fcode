@@ -234,7 +234,7 @@ const LessonPage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          bgcolor: "#f5f5f5",
+          bgcolor: "#FCFCFC",
           minHeight: "100vh",
         }}
       >
