@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* INDUSTRIAL MINIMALISM CSS */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #e4e4e7;
+        --sl: #fff;
+        --sf: #f4f4f5;
+        --bd: #e4e4e7;
+        --tx: #18181b;
+        --tx2: #52525b;
+        --bl: #2563eb;
+        --pp: #9333ea;
+        --gr: #16a34a;
+        --rd: #dc2626;
+        --rad: 8px;
+        --sh:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      body {
+        background: var(--bg);
+        font-family: "Inter", sans-serif;
+        color: var(--tx);
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        background: var(--sl);
+        border: 1px solid #fff;
+        border-radius: var(--rad);
+        position: relative;
+        overflow: hidden;
+        padding: 60px 80px;
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: var(--sh);
+      }
+      .f-code-badge {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 99px;
+        padding: 6px 16px;
+        font-family: "JetBrains Mono";
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .slide-header {
+        position: absolute;
+        top: 28px;
+        left: 80px;
+        font-family: "JetBrains Mono";
+        font-size: 13px;
+        color: var(--tx2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h2 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--bl);
+        margin-bottom: 16px;
+      }
+      p,
+      li {
+        font-family: "JetBrains Mono";
+        font-size: 18px;
+        line-height: 1.6;
+        color: #3f3f46;
+        margin-bottom: 16px;
+      }
+      .highlight-box {
+        background: var(--sf);
+        border-left: 4px solid var(--bl);
+        padding: 24px;
+        border-radius: 0 var(--rad) var(--rad) 0;
+        margin: 24px 0;
+        color: var(--tx);
+      }
+      .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 60px;
+        height: 320px;
+        width: 100%;
+        border-bottom: 2px solid var(--bd);
+        margin: 20px 0 40px;
+        padding-bottom: 10px;
+      }
+      .bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        width: 120px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 4px 4px 0 0;
+        transition: height 0.5s;
+        background: var(--bl);
+      }
+      .bar-val {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--tx);
+      }
+      .bar-lbl {
+        margin-top: 12px;
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .bg-blue {
+        background: var(--bl);
+      }
+      .bg-purple {
+        background: var(--pp);
+      }
+      .bg-green {
+        background: var(--gr);
+      }
+      .process-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 40px 0;
+        width: 100%;
+        padding: 0 20px;
+      }
+      .process-step {
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 24px;
+        width: 260px;
+        text-align: center;
+      }
+      .process-icon {
+        font-size: 32px;
+        margin-bottom: 16px;
+        color: var(--tx);
+      }
+      .process-title {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .process-arrow {
+        color: var(--bd);
+        font-size: 24px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 24px;
+        border: 1px solid var(--bd);
+        border-radius: var(--rad);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+      }
+      th,
+      td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid var(--bd);
+      }
+      th {
+        background: var(--sf);
+        font-weight: 700;
+        color: var(--tx);
+      }
+      td {
+        color: #3f3f46;
+      }
+      .code-block {
+        background: #18181b;
+        color: #e4e4e7;
+        padding: 24px;
+        border-radius: var(--rad);
+        font-family: "JetBrains Mono";
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+        box-shadow: var(--sh);
+        border: 1px solid #27272a;
+      }
+      .code-kw {
+        color: #c084fc;
+      }
+      .code-str {
+        color: #4ade80;
+      }
+      .code-fn {
+        color: #60a5fa;
+      }
+      .code-cmt {
+        color: #71717a;
+        font-style: italic;
+      }
+      .quote-clean {
+        font-family: "Inter";
+        font-size: 28px;
+        font-weight: 300;
+        font-style: italic;
+        color: var(--tx);
+        border-left: 4px solid var(--gr);
+        padding-left: 32px;
+        margin: 40px 0;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+      }
+      .slide-num {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        color: var(--tx2);
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: Title -->
+    <div class="slide-container">
+      <div class="f-code-badge">Part 1: Evolution</div>
+      <div class="center">
+        <i
+          class="fa-solid fa-network-wired"
+          style="font-size: 64px; color: var(--tx2); margin-bottom: 32px"
+        ></i>
+        <h1>F-CODE WEB ARCHITECTING</h1>
+        <h2 style="color: var(--tx2); font-size: 32px">
+          Từ Kỷ nguyên Mainframe đến Client-Server
+        </h2>
+        <div
+          class="highlight-box"
+          style="margin-top: 40px; border-left-color: var(--pp)"
+        >
+          <p style="margin: 0; font-weight: 600">Thực hiện bởi FCT1</p>
+        </div>
+      </div>
+      <div class="slide-num">01</div>
+    </div>
+
+    <!-- SLIDE 2: Mainframe Era -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Dark Age</div>
+      <div class="slide-header">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>1960s Context</span>
+      </div>
+
+      <h2>Kỷ nguyên Mainframe - Tập trung tuyệt đối</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <p>"Trí tuệ" máy tính bị nhốt trong những căn phòng lạnh lẽo.</p>
+          <ul>
+            <li>Hệ thống tập trung tuyệt đối (Centralized).</li>
+            <li>Người dùng không sở hữu CPU.</li>
+            <li>Quyền lực tính toán thuộc về "Big Iron".</li>
+          </ul>
+        </div>
+        <div
+          class="center"
+          style="
+            background: var(--sf);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--bd);
+          "
+        >
+          <img
+            src="./asset/IBMSystem.gif"
+            alt="IBM System/360"
+            style="
+              max-width: 100%;
+              max-height: 400px;
+              object-fit: contain;
+              border-radius: 8px;
+            "
+          />
+          <p style="margin-top: 24px; font-weight: 700">IBM System/360</p>
+        </div>
+      </div>
+      <div class="slide-num">02</div>
+    </div>
+
+    <!-- SLIDE 3: Dumb Terminal -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Dark Age</div>
+      <h2>Giới hạn của "Terminal Dumb" - Không thể tương tác</h2>
+
+      <div class="process-container">
+        <div class="process-step">
+          <i class="fa-solid fa-terminal process-icon"></i>
+          <div class="process-title">User Terminal</div>
+          <p style="font-size: 14px; margin-top: 8px">Chỉ hiển thị & Gõ phím</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step" style="border-color: var(--rd)">
+          <i class="fa-solid fa-ban process-icon" style="color: var(--rd)"></i>
+          <div class="process-title">Dependency</div>
+          <p style="font-size: 14px; margin-top: 8px">Phụ thuộc tuyệt đối</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step">
+          <i class="fa-solid fa-server process-icon"></i>
+          <div class="process-title">Mainframe</div>
+          <p style="font-size: 14px; margin-top: 8px">Xử lý tất cả mọi thứ</p>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <i
+          class="fa-solid fa-triangle-exclamation"
+          style="color: var(--bl); margin-right: 12px"
+        ></i>
+        Server treo -> Hàng trăm nhân viên ngừng việc ngay lập tức.
+      </div>
+      <div class="slide-num">03</div>
+    </div>
+
+    <!-- SLIDE 4: Silo Effect -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Problem</div>
+      <h2>The Silo Effect (Hiệu ứng Phân mảnh)</h2>
+
+      <div class="grid-2">
+        <div class="code-block" style="background: #27272a; height: 100%">
+          <div style="text-align: center; margin-bottom: 20px">
+            <i
+              class="fa-solid fa-building-columns"
+              style="font-size: 48px; color: #a1a1aa"
+            ></i>
+            <h3 style="color: #fff; margin-top: 16px">Đại học A</h3>
+          </div>
+          <p style="color: #71717a; font-size: 14px">Data: Research_A.dat</p>
+          <p style="color: #ef4444; font-size: 14px">[x] No Access Allowed</p>
+        </div>
+
+        <div class="code-block" style="background: #27272a; height: 100%">
+          <div style="text-align: center; margin-bottom: 20px">
+            <i
+              class="fa-solid fa-flask"
+              style="font-size: 48px; color: #a1a1aa"
+            ></i>
+            <h3 style="color: #fff; margin-top: 16px">Đại học B</h3>
+          </div>
+          <p style="color: #71717a; font-size: 14px">Data: Lab_Results.dat</p>
+          <p style="color: #ef4444; font-size: 14px">[x] No Access Allowed</p>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 24px">
+        Giải pháp duy nhất thời đó:
+        <span
+          style="
+            background: var(--pp);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+          "
+          >Magnetic Tape (Băng từ)</span
+        >
+        mang vác thủ công.
+      </p>
+      <div class="slide-num">04</div>
+    </div>
+
+    <!-- SLIDE 5: CERN Context -->
+    <div class="slide-container">
+      <div class="f-code-badge">1989 Context</div>
+      <h2>CERN: Nơi vấn đề trở nên cấp bách</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <h3>The Fragmentation</h3>
+          <p>Hàng ngàn nhà khoa học sử dụng các hệ thống không tương thích:</p>
+          <ul style="list-style: none; padding-left: 0">
+            <li style="display: flex; gap: 12px; align-items: center">
+              <i class="fa-solid fa-desktop"></i> VAX Systems
+            </li>
+            <li style="display: flex; gap: 12px; align-items: center">
+              <i class="fa-brands fa-apple"></i> Macintosh
+            </li>
+            <li style="display: flex; gap: 12px; align-items: center">
+              <i class="fa-brands fa-linux"></i> Unix Workstations
+            </li>
+          </ul>
+        </div>
+        <div class="highlight-box" style="border-left-color: var(--rd)">
+          <p style="font-weight: 700">Pain Point:</p>
+          <p>
+            "Làm sao tôi (Mac) xem được tài liệu của anh (VAX) mà không cần cài
+            lại hệ điều hành?"
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">05</div>
+    </div>
+
+    <!-- SLIDE 6: Tim Berners-Lee (Re-designed with Image) -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Revolution</div>
+      <h2>Tim Berners-Lee và World Wide Web</h2>
+
+      <div class="grid-2" style="align-items: center; gap: 60px">
+        <!-- Left Column: Image -->
+        <div class="center" style="justify-content: flex-start">
+          <img
+            src="./asset/tim-berners-lee.jpg"
+            alt="Tim Berners-Lee"
+            style="
+              width: 100%;
+              max-height: 380px;
+              object-fit: cover;
+              border-radius: 8px;
+              box-shadow: var(--sh);
+              border: 1px solid var(--bd);
+            "
+          />
+          <p
+            style="
+              font-size: 14px;
+              margin-top: 16px;
+              color: var(--tx2);
+              font-family: &quot;JetBrains Mono&quot;;
+            "
+          >
+            <i class="fa-solid fa-camera"></i> Sir Tim đến Guildhall để nhận danh hiệu Công dân danh dự của London, 2014
+          </p>
+        </div>
+
+        <!-- Right Column: Content -->
+        <div>
+          <div class="quote-clean" style="margin-top: 0; margin-bottom: 32px">
+            "Không cố gắng đồng bộ hóa phần cứng.<br />
+            Hãy tạo ra một
+            <span style="color: var(--bl); font-weight: 700"
+              >Giao thức giao tiếp chung</span
+            >."
+          </div>
+
+          <div class="highlight-box">
+            <h3 style="font-size: 20px; margin-bottom: 8px">The Solution:</h3>
+            <p style="margin: 0; font-size: 16px">
+              Thay vì viết lại hệ điều hành, ông tạo ra
+              <strong>World Wide Web (WWW)</strong> - ứng dụng vĩ đại nhất của
+              mô hình Client-Server.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">06</div>
+    </div>
+
+    <!-- SLIDE 7: The Big Split -->
+    <div class="slide-container">
+      <div class="f-code-badge">Core Concept</div>
+      <h2>Cuộc chia tách vĩ đại: Client vs Server</h2>
+      <p style="margin-bottom: 32px">
+        Cuộc cách mạng về <strong>Separation of Concerns</strong> (Phân chia lao
+        động).
+      </p>
+
+      <div class="grid-2">
+        <div
+          class="process-step"
+          style="width: 100%; background: #eff6ff; border-color: #bfdbfe"
+        >
+          <i
+            class="fa-solid fa-laptop-code process-icon"
+            style="color: var(--bl)"
+          ></i>
+          <div class="process-title" style="color: var(--bl)">
+            Client (Front-end)
+          </div>
+          <p style="font-size: 16px; margin-top: 12px; color: #1e3a8a">
+            Hiển thị giao diện (UI)<br />
+            Tương tác người dùng (UX)<br />
+            Trình duyệt (Browser)
+          </p>
+        </div>
+
+        <div
+          class="process-step"
+          style="width: 100%; background: #f0fdf4; border-color: #bbf7d0"
+        >
+          <i
+            class="fa-solid fa-server process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title" style="color: var(--gr)">
+            Server (Back-end)
+          </div>
+          <p style="font-size: 16px; margin-top: 12px; color: #14532d">
+            Lưu trữ dữ liệu (DB)<br />
+            Xử lý Logic nghiệp vụ<br />
+            Bảo mật (Security)
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">07</div>
+    </div>
+
+    <!-- SLIDE 8: Why Decoupling Matters -->
+    <div class="slide-container">
+      <div class="f-code-badge">Benefits</div>
+      <h2>Tại sao việc "tách rời" lại quan trọng?</h2>
+
+      <div class="highlight-box">
+        <ul style="list-style: none; padding: 0">
+          <li
+            style="
+              margin-bottom: 24px;
+              display: flex;
+              align-items: center;
+              gap: 16px;
+            "
+          >
+            <i
+              class="fa-solid fa-check"
+              style="color: var(--gr); font-size: 24px"
+            ></i>
+            <span
+              ><strong>Server:</strong> Không cần biết Client là
+              PC, Mobile hay Tablet.</span
+            >
+          </li>
+          <li
+            style="
+              margin-bottom: 24px;
+              display: flex;
+              align-items: center;
+              gap: 16px;
+            "
+          >
+            <i
+              class="fa-solid fa-check"
+              style="color: var(--gr); font-size: 24px"
+            ></i>
+            <span
+              ><strong>Client :</strong> Không cần biết Server
+              chạy Linux hay Windows.</span
+            >
+          </li>
+          <li style="display: flex; align-items: center; gap: 16px">
+            <i
+              class="fa-solid fa-rocket"
+              style="color: var(--pp); font-size: 24px"
+            ></i>
+            <span
+              ><strong>Independent Scale:</strong> Tự do phát triển công nghệ
+              cho cả hai phía.</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="slide-num">08</div>
+    </div>
+
+    <!-- SLIDE 9: HTTP Intro -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Protocol</div>
+      <h2>HTTP: Ngôn ngữ chung</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <p>Để 2 thế giới hiểu nhau, chúng cần một quy tắc giao tiếp:</p>
+          <h3 style="font-size: 48px; margin: 24px 0">H.T.T.P</h3>
+          <p style="font-style: italic; color: var(--tx2)">
+            HyperText Transfer Protocol
+          </p>
+        </div>
+        <div class="code-block">
+          <div class="code-cmt">// Nguyên tắc cốt lõi</div>
+          <span class="code-kw">protocol</span>
+          <span class="code-fn">HTTP</span> {<br />
+          &nbsp;&nbsp;<span class="code-kw">rule</span>:
+          <span class="code-str">"Ask & Answer"</span>;<br />
+          &nbsp;&nbsp;<span class="code-kw">roles</span>: [<span
+            class="code-str"
+            >"Client"</span
+          >, <span class="code-str">"Server"</span>];<br />
+          }
+        </div>
+      </div>
+      <div class="slide-num">09</div>
+    </div>
+
+    <!-- SLIDE 10: Request Response Cycle -->
+    <div class="slide-container">
+      <div class="f-code-badge">Mechanics</div>
+      <h2>Vòng đời Request-Response</h2>
+
+      <div class="process-container" style="margin-top: 80px">
+        <div class="bar-group" style="width: auto">
+          <i
+            class="fa-solid fa-user"
+            style="font-size: 48px; margin-bottom: 12px"
+          ></i>
+          <span class="bar-lbl">Initiator</span>
+        </div>
+
+        <div
+          style="
+            flex: 1;
+            margin: 0 40px;
+            position: relative;
+            text-align: center;
+          "
+        >
+          <div
+            style="border-top: 2px dashed var(--bl); margin-bottom: 8px"
+          ></div>
+          <div
+            style="
+              background: var(--bl);
+              color: white;
+              padding: 4px 12px;
+              border-radius: 4px;
+              display: inline-block;
+              font-size: 14px;
+              font-weight: 700;
+            "
+          >
+            REQUEST
+          </div>
+          <div style="height: 40px"></div>
+          <div
+            style="
+              background: var(--gr);
+              color: white;
+              padding: 4px 12px;
+              border-radius: 4px;
+              display: inline-block;
+              font-size: 14px;
+              font-weight: 700;
+            "
+          >
+            RESPONSE
+          </div>
+          <div style="border-top: 2px dashed var(--gr); margin-top: 8px"></div>
+        </div>
+
+        <div class="bar-group" style="width: auto">
+          <i
+            class="fa-solid fa-server"
+            style="font-size: 48px; margin-bottom: 12px"
+          ></i>
+          <span class="bar-lbl">Reactor</span>
+        </div>
+      </div>
+      <p style="text-align: center; color: var(--tx2)">
+        Server không bao giờ tự ý gửi tin nếu không được hỏi.
+      </p>
+      <div class="slide-num">10</div>
+    </div>
+
+    <!-- SLIDE 11: Inside Request -->
+    <div class="slide-container">
+      <div class="f-code-badge">Deep Dive</div>
+      <h2>Inside the Request</h2>
+      <p>Khi học viên bấm vào khóa học, Client gửi gì?</p>
+
+      <div class="code-block">
+        <span class="code-kw">GET</span>
+        <span class="code-str">/course/python-basic</span>
+        <span class="code-kw">HTTP</span>/1.1<br />
+        <span class="code-fn">Host</span>: f-code.edu.vn<br />
+        <span class="code-fn">User-Agent</span>: Chrome/120.0<br />
+        <span class="code-fn">Accept</span>: application/json<br />
+        <span class="code-fn">Authorization</span>: Bearer eyJhbGci...
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <i class="fa-solid fa-caret-right" style="color: var(--bl)"></i>
+          <strong>Verb:</strong> Hành động (GET)
+        </div>
+        <div>
+          <i class="fa-solid fa-caret-right" style="color: var(--pp)"></i>
+          <strong>Resource:</strong> Tài nguyên cần lấy
+        </div>
+      </div>
+      <div class="slide-num">11</div>
+    </div>
+
+    <!-- SLIDE 12: Server Logic -->
+    <div class="slide-container">
+      <div class="f-code-badge">Mechanics</div>
+      <h2>Server Processing (Black Box)</h2>
+
+      <div class="process-container">
+        <div class="process-step" style="width: 200px">
+          <i
+            class="fa-solid fa-shield-halved process-icon"
+            style="color: var(--rd)"
+          ></i>
+          <div class="process-title">Auth</div>
+          <p style="font-size: 13px; margin-top: 8px">Who are you?</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step" style="width: 200px">
+          <i
+            class="fa-solid fa-database process-icon"
+            style="color: var(--bl)"
+          ></i>
+          <div class="process-title">Query DB</div>
+          <p style="font-size: 13px; margin-top: 8px">SELECT * FROM...</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step" style="width: 200px">
+          <i
+            class="fa-solid fa-box-open process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title">Pack</div>
+          <p style="font-size: 13px; margin-top: 8px">JSON Format</p>
+        </div>
+      </div>
+      <div class="slide-num">12</div>
+    </div>
+
+    <!-- SLIDE 13: Inside Response -->
+    <div class="slide-container">
+      <div class="f-code-badge">Deep Dive</div>
+      <h2>Inside the Response</h2>
+      <p>Server trả về kết quả cho Client:</p>
+
+      <div class="code-block">
+        <span class="code-kw">HTTP</span>/1.1
+        <span class="code-str">200 OK</span><br />
+        <span class="code-fn">Content-Type</span>: application/json<br />
+        <br />
+        {<br />
+        &nbsp;&nbsp;<span class="code-str">"id"</span>:
+        <span class="code-kw">101</span>,<br />
+        &nbsp;&nbsp;<span class="code-str">"title"</span>:
+        <span class="code-str">"Python for Beginners"</span>,<br />
+        &nbsp;&nbsp;<span class="code-str">"price"</span>:
+        <span class="code-kw">0</span><br />
+        }
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <i class="fa-solid fa-circle-check" style="color: var(--gr)"></i>
+          <strong>Status Code:</strong> 200 OK (Thành công)
+        </div>
+        <div>
+          <i class="fa-solid fa-box" style="color: var(--pp)"></i>
+          <strong>Payload:</strong> Dữ liệu thực tế
+        </div>
+      </div>
+      <div class="slide-num">13</div>
+    </div>
+
+    <!-- SLIDE 14: Statelessness -->
+    <div class="slide-container">
+      <div class="f-code-badge">Core Principle</div>
+      <h2>Statelessness (Tính Phi trạng thái)</h2>
+
+      <div class="highlight-box" style="border-left-color: var(--pp)">
+        <h3>
+          <i class="fa-solid fa-memory" style="margin-right: 12px"></i> Không có bộ nhớ lưu trữ lịch sử của các Request
+        </h3>
+        <p>Server "quên" ngay Client là ai sau khi trả lời xong.</p>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size: 20px">Tại sao?</h3>
+          <p>
+            Để giải phóng bộ nhớ. Server không thể nhớ "chuyện đời tư" của hàng
+            triệu Client.
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size: 20px">Tác động</h3>
+          <p>Mỗi Request mới đều phải tự giới thiệu lại (gửi kèm Token).</p>
+        </div>
+      </div>
+      <div class="slide-num">14</div>
+    </div>
+
+    <!-- SLIDE 15: Data Format Evolution -->
+    <div class="slide-container">
+      <div class="f-code-badge">Evolution</div>
+      <h2>Sự tiến hóa của định dạng</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Era</th>
+              <th>Format</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Traditional</strong></td>
+              <td style="color: var(--rd)">HTML</td>
+              <td>Server trả về toàn bộ giao diện (Nặng, Tốn băng thông)</td>
+            </tr>
+            <tr>
+              <td><strong>Modern</strong></td>
+              <td style="color: var(--gr)">JSON</td>
+              <td>Server chỉ trả dữ liệu thô. Client tự vẽ UI (Nhẹ, Nhanh)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="center" style="margin-top: 20px">
+        <i class="fa-solid fa-arrow-down" style="color: var(--bd)"></i>
+        <p style="margin-top: 10px; font-weight: 700; color: var(--bl)">
+          Tối ưu hóa Performance cho Mobile
+        </p>
+      </div>
+      <div class="slide-num">15</div>
+    </div>
+
+    <!-- SLIDE 16: E-Learning Context -->
+    <div class="slide-container">
+      <div class="f-code-badge">Application</div>
+      <h2>Kịch bản E-Learning (F-Code)</h2>
+
+      <div class="grid-2">
+        <div class="process-step" style="width: 100%; text-align: left">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 16px;
+            "
+          >
+            <i class="fa-solid fa-mobile-screen" style="font-size: 24px"></i>
+            <span class="process-title">Client (App)</span>
+          </div>
+          <ul style="font-size: 16px; padding-left: 20px">
+            <li>Hiển thị khung player video.</li>
+            <li>Hiệu ứng nút bấm, loading.</li>
+            <li>Cache bài học offline.</li>
+          </ul>
+        </div>
+
+        <div class="process-step" style="width: 100%; text-align: left">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 16px;
+            "
+          >
+            <i class="fa-solid fa-server" style="font-size: 24px"></i>
+            <span class="process-title">Server (API)</span>
+          </div>
+          <ul style="font-size: 16px; padding-left: 20px">
+            <li>Kiểm tra học phí.</li>
+            <li>Lưu tiến độ học (50%).</li>
+            <li>Gợi ý khóa học tiếp theo.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">16</div>
+    </div>
+
+    <!-- SLIDE 17: Multi-Platform -->
+    <div class="slide-container">
+      <div class="f-code-badge">Scale</div>
+      <h2>Hỗ trợ Đa nền tảng</h2>
+      <p>1 Backend phục vụ N Frontend.</p>
+
+      <div class="center" style="margin-top: 40px">
+        <div style="display: flex; gap: 60px; align-items: flex-end">
+          <div style="text-align: center">
+            <i
+              class="fa-solid fa-laptop"
+              style="font-size: 40px; color: var(--tx2); margin-bottom: 12px"
+            ></i>
+            <p style="font-size: 14px">Web</p>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fa-brands fa-android"
+              style="font-size: 40px; color: var(--gr); margin-bottom: 12px"
+            ></i>
+            <p style="font-size: 14px">Android</p>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fa-brands fa-apple"
+              style="font-size: 40px; color: var(--tx); margin-bottom: 12px"
+            ></i>
+            <p style="font-size: 14px">iOS</p>
+          </div>
+        </div>
+
+        <div style="margin: 20px 0">
+          <i
+            class="fa-solid fa-arrow-up"
+            style="color: var(--bd); font-size: 32px"
+          ></i>
+        </div>
+
+        <div
+          class="highlight-box"
+          style="margin: 0; width: 300px; text-align: center"
+        >
+          <strong>Unified Backend API</strong>
+        </div>
+      </div>
+      <div class="slide-num">17</div>
+    </div>
+
+    <!-- SLIDE 18: Efficiency -->
+    <div class="slide-container">
+      <div class="f-code-badge">Impact</div>
+      <h2>Hiệu quả mang lại</h2>
+      <p>Giảng viên upload 1 lần -> Hàng nghìn người học ngay lập tức.</p>
+
+      <!-- Data: Manual=1, Server=1000. Max=1000. -->
+      <div class="chart-container">
+        <!-- 1/1000 = 0.1% -> min height visual 2% -->
+        <div class="bar-group">
+          <span class="bar-val">1</span>
+          <div class="bar bg-blue" style="height: 2%"></div>
+          <span class="bar-lbl">Manual Tape</span>
+        </div>
+        <!-- 1000/1000 = 100% -->
+        <div class="bar-group">
+          <span class="bar-val">1k+</span>
+          <div class="bar bg-green" style="height: 100%"></div>
+          <span class="bar-lbl">Server Model</span>
+        </div>
+      </div>
+      <div class="slide-num">18</div>
+    </div>
+
+    <!-- SLIDE 19: The Trap (Monolith) -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Cliffhanger</div>
+      <h2 style="color: var(--rd)">Cái bẫy của một máy chủ</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <p>Mô hình 1 Server (Monolith) rất mạnh, nhưng...</p>
+          <ul style="margin-top: 24px">
+            <li>Khóa học "Hot" ra mắt.</li>
+            <li>100.000 users truy cập cùng lúc.</li>
+            <li><strong>Overload</strong> (Quá tải).</li>
+          </ul>
+        </div>
+
+        <div
+          class="highlight-box"
+          style="border-left: 4px solid var(--rd); background: #fef2f2"
+        >
+          <div style="text-align: center">
+            <i
+              class="fa-solid fa-triangle-exclamation"
+              style="font-size: 64px; color: var(--rd); margin-bottom: 24px"
+            ></i>
+            <h3 style="color: var(--rd)">SYSTEM CRASH 503</h3>
+            <p style="color: var(--rd)">Service Unavailable</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">19</div>
+    </div>
+
+    <!-- SLIDE 20: Next Steps -->
+    <div class="slide-container">
+      <div class="f-code-badge">Part 2 Preview</div>
+      <h2>Vấn đề về quy mô (Scaling)</h2>
+
+      <div class="center">
+        <p style="font-size: 24px; margin-bottom: 40px">
+          "Làm sao phục vụ <strong>1 triệu người dùng</strong> mà không cần một
+          siêu máy tính?"
+        </p>
+
+        <div
+          class="process-container"
+          style="justify-content: center; gap: 40px; margin: 0"
+        >
+          <div class="process-step" style="background: white">
+            <i
+              class="fa-solid fa-layer-group process-icon"
+              style="color: var(--pp)"
+            ></i>
+            <div class="process-title">Microservices?</div>
+          </div>
+          <div class="process-step" style="background: white">
+            <i
+              class="fa-solid fa-cloud process-icon"
+              style="color: var(--bl)"
+            ></i>
+            <div class="process-title">Load Balancing?</div>
+          </div>
+        </div>
+
+        <p style="margin-top: 40px; font-weight: 700; color: var(--tx2)">
+          Coming Up: BACKEND ARCHITECTURE
+        </p>
+      </div>
+      <div class="slide-num">20</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* INDUSTRIAL MINIMALISM CSS */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #e4e4e7;
+        --sl: #fff;
+        --sf: #f4f4f5;
+        --bd: #e4e4e7;
+        --tx: #18181b;
+        --tx2: #52525b;
+        --bl: #2563eb;
+        --pp: #9333ea;
+        --gr: #16a34a;
+        --rd: #dc2626;
+        --rad: 8px;
+        --sh:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      body {
+        background: var(--bg);
+        font-family: "Inter", sans-serif;
+        color: var(--tx);
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        background: var(--sl);
+        border: 1px solid #fff;
+        border-radius: var(--rad);
+        position: relative;
+        overflow: hidden;
+        padding: 60px 80px;
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: var(--sh);
+      }
+      .f-code-badge {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 99px;
+        padding: 6px 16px;
+        font-family: "JetBrains Mono";
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .slide-header {
+        position: absolute;
+        top: 28px;
+        left: 80px;
+        font-family: "JetBrains Mono";
+        font-size: 13px;
+        color: var(--tx2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h2 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--bl);
+        margin-bottom: 16px;
+      }
+      p,
+      li {
+        font-family: "JetBrains Mono";
+        font-size: 18px;
+        line-height: 1.6;
+        color: #3f3f46;
+        margin-bottom: 16px;
+      }
+      .highlight-box {
+        background: var(--sf);
+        border-left: 4px solid var(--bl);
+        padding: 24px;
+        border-radius: 0 var(--rad) var(--rad) 0;
+        margin: 24px 0;
+        color: var(--tx);
+      }
+      .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 60px;
+        height: 320px;
+        width: 100%;
+        border-bottom: 2px solid var(--bd);
+        margin: 20px 0 40px;
+        padding-bottom: 10px;
+      }
+      .bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        width: 120px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 4px 4px 0 0;
+        transition: height 0.5s;
+        background: var(--bl);
+      }
+      .bar-val {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--tx);
+      }
+      .bar-lbl {
+        margin-top: 12px;
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .bg-blue {
+        background: var(--bl);
+      }
+      .bg-purple {
+        background: var(--pp);
+      }
+      .bg-green {
+        background: var(--gr);
+      }
+      .process-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 40px 0;
+        width: 100%;
+        padding: 0 20px;
+      }
+      .process-step {
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 24px;
+        width: 260px;
+        text-align: center;
+      }
+      .process-icon {
+        font-size: 32px;
+        margin-bottom: 16px;
+        color: var(--tx);
+      }
+      .process-title {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .process-arrow {
+        color: var(--bd);
+        font-size: 24px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 24px;
+        border: 1px solid var(--bd);
+        border-radius: var(--rad);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+      }
+      th,
+      td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid var(--bd);
+      }
+      th {
+        background: var(--sf);
+        font-weight: 700;
+        color: var(--tx);
+      }
+      td {
+        color: #3f3f46;
+      }
+      .code-block {
+        background: #18181b;
+        color: #e4e4e7;
+        padding: 24px;
+        border-radius: var(--rad);
+        font-family: "JetBrains Mono";
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+        box-shadow: var(--sh);
+        border: 1px solid #27272a;
+      }
+      .code-kw {
+        color: #c084fc;
+      }
+      .code-str {
+        color: #4ade80;
+      }
+      .code-fn {
+        color: #60a5fa;
+      }
+      .code-cmt {
+        color: #71717a;
+        font-style: italic;
+      }
+      .quote-clean {
+        font-family: "Inter";
+        font-size: 28px;
+        font-weight: 300;
+        font-style: italic;
+        color: var(--tx);
+        border-left: 4px solid var(--gr);
+        padding-left: 32px;
+        margin: 40px 0;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+      }
+      .slide-num {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        color: var(--tx2);
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: Title -->
+    <div class="slide-container">
+      <div class="f-code-badge">Part 2: Backend Architecture</div>
+      <div class="center">
+        <i
+          class="fa-solid fa-layer-group"
+          style="font-size: 80px; color: var(--bl); margin-bottom: 32px"
+        ></i>
+        <h1 style="font-size: 56px">BACKEND EVOLUTION</h1>
+        <h2 style="font-size: 32px; color: var(--tx2); font-weight: 400">
+          Từ Monolith đến Microservices
+        </h2>
+        <div class="highlight-box" style="margin-top: 40px">
+          <p style="margin: 0">
+            "Khi có hàng triệu users, chúng ta không thể chỉ xếp code vào một
+            thư mục được nữa."
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">01</div>
+    </div>
+
+    <!-- SLIDE 2: Monolith Concept -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Start</div>
+      <h2>Khái niệm Nguyên khối (Monolith)</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <div class="highlight-box" style="border-left-color: var(--pp)">
+            <strong>Định nghĩa:</strong>
+            <p style="margin-top: 10px">
+              Một khối duy nhất (Single Codebase). Tất cả module chức năng được
+              đóng gói và deploy cùng nhau.
+            </p>
+          </div>
+          <ul style="margin-top: 24px">
+            <li>
+              <i class="fa-solid fa-file-zipper"></i> 1 File Deployment (.war,
+              .jar)
+            </li>
+            <li><i class="fa-solid fa-server"></i> 1 Server Process</li>
+            <li><i class="fa-solid fa-database"></i> Shared Database</li>
+          </ul>
+        </div>
+        <div
+          class="center"
+          style="background: var(--sf); padding: 40px; border-radius: 8px"
+        >
+          <div
+            style="
+              border: 2px solid var(--tx);
+              padding: 20px;
+              width: 200px;
+              background: white;
+              border-radius: 4px;
+            "
+          >
+            <div
+              style="
+                border-bottom: 1px solid var(--bd);
+                padding: 10px;
+                text-align: center;
+                background: #e0e7ff;
+              "
+            >
+              User Module
+            </div>
+            <div
+              style="
+                border-bottom: 1px solid var(--bd);
+                padding: 10px;
+                text-align: center;
+                background: #dbeafe;
+              "
+            >
+              Payment
+            </div>
+            <div style="padding: 10px; text-align: center; background: #d1fae5">
+              Course
+            </div>
+          </div>
+          <p style="margin-top: 16px; font-weight: 700">Server App</p>
+        </div>
+      </div>
+      <div class="slide-num">02</div>
+    </div>
+
+    <!-- SLIDE 3: Udemy 2010 -->
+    <div class="slide-container">
+      <div class="f-code-badge">Case Study</div>
+      <h2>Udemy vào năm 2010 (Giai đoạn khởi nghiệp)</h2>
+
+      <div class="code-block">
+        <div class="code-cmt">// Cấu trúc thư mục PHP/Python thuở sơ khai</div>
+        project_udemy/<br />
+        ├── <span class="code-fn">auth/</span>
+        <span class="code-cmt"># Login, Register</span><br />
+        ├── <span class="code-fn">video/</span>
+        <span class="code-cmt"># Upload, Stream</span><br />
+        ├── <span class="code-fn">billing/</span>
+        <span class="code-cmt"># Charge money</span><br />
+        ├── <span class="code-kw">index.php</span><br />
+        └── <span class="code-kw">db_config.php</span>
+        <span class="code-cmt"># 1 Connection String</span>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <i class="fa-solid fa-check" style="color: var(--gr)"></i> Logic đăng
+          ký học viên
+        </div>
+        <div>
+          <i class="fa-solid fa-check" style="color: var(--gr)"></i> Logic tính
+          tiền
+        </div>
+        <div>
+          <i class="fa-solid fa-check" style="color: var(--gr)"></i> Logic xử lý
+          video
+        </div>
+        <div>
+          <i class="fa-solid fa-database" style="color: var(--pp)"></i>
+          <strong>Dùng chung 1 Database</strong>
+        </div>
+      </div>
+      <div class="slide-num">03</div>
+    </div>
+
+    <!-- SLIDE 4: Why Monolith First? -->
+    <div class="slide-container">
+      <div class="f-code-badge">Analysis</div>
+      <h2>Tại sao Monolith lại được chọn ban đầu?</h2>
+      <p>99% Startup chọn kiến trúc này ban đầu vì...</p>
+
+      <div class="process-container">
+        <div class="process-step">
+          <i
+            class="fa-solid fa-laptop-code process-icon"
+            style="color: var(--bl)"
+          ></i>
+          <div class="process-title">Dễ phát triển</div>
+          <p style="font-size: 14px; margin-top: 8px">
+            IDE hỗ trợ tốt, code nằm một chỗ
+          </p>
+        </div>
+
+        <div class="process-step">
+          <i class="fa-solid fa-bug process-icon" style="color: var(--pp)"></i>
+          <div class="process-title">Dễ gỡ lỗi</div>
+          <p style="font-size: 14px; margin-top: 8px">
+            Trace lỗi từ A-Z trong 1 dòng
+          </p>
+        </div>
+
+        <div class="process-step">
+          <i
+            class="fa-solid fa-sack-dollar process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title">Rẻ tiền</div>
+          <p style="font-size: 14px; margin-top: 8px">1 Server là đủ chạy</p>
+        </div>
+      </div>
+      <div class="slide-num">04</div>
+    </div>
+
+    <!-- SLIDE 5: Single Process Reality -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Reality</div>
+      <h2>Thực tế của một process đơn</h2>
+
+      <div class="code-block" style="margin-bottom: 40px">
+        <span class="code-kw">function</span>
+        <span class="code-fn">buyCourse</span>(user, course) {<br />
+        &nbsp;&nbsp;<span class="code-cmt"
+          >// Gọi hàm nội bộ -> Cực nhanh (Memory Call)</span
+        ><br />
+        &nbsp;&nbsp;<span class="code-kw">if</span> (<span class="code-fn"
+          >checkBalance</span
+        >(user)) {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-fn">addCourseToProfile</span
+        >(user, course);<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-fn">sendEmail</span
+        >(user);<br />
+        &nbsp;&nbsp;}<br />
+        }
+      </div>
+
+      <div class="highlight-box" style="border-left-color: var(--rd)">
+        <i
+          class="fa-solid fa-triangle-exclamation"
+          style="color: var(--rd); margin-right: 12px"
+        ></i>
+        Mọi chuyện êm đẹp cho đến khi <strong>User thứ 1 triệu</strong> xuất
+        hiện.
+      </div>
+      <div class="slide-num">05</div>
+    </div>
+
+    <!-- SLIDE 6: Big Ball of Mud -->
+    <div class="slide-container">
+      <div class="f-code-badge">Growing Pains</div>
+      <h2>The "Big Ball of Mud"</h2>
+      <p>Codebase trở nên khổng lồ và rối rắm (Spaghetti code).</p>
+
+      <div class="grid-2">
+        <img
+            src="./asset/SpaghettiCode.jpg"
+            alt="Spaghetti Code"
+            style="
+              max-width: 100%;
+              max-height: 400px;
+              object-fit: contain;
+              border-radius: 8px;
+            "
+          />
+        <div>
+          <div
+            class="highlight-box"
+            style="
+              border-left-color: var(--rd);
+              background: #fef2f2;
+              margin-top: 0;
+            "
+          >
+            <strong>Scenario:</strong>
+            <p>Một Dev sửa tính năng "Đổi Avatar"...</p>
+            <p style="color: var(--rd); font-weight: 700">
+              -> Vô tình làm hỏng tính năng "Thanh toán".
+            </p>
+          </div>
+          <p style="margin-top: 20px">
+            Hậu quả: Không ai dám chạm vào code cũ (Legacy Code).
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">06</div>
+    </div>
+
+    <!-- SLIDE 7: Deployment Nightmare -->
+    <div class="slide-container">
+      <div class="f-code-badge">Growing Pains</div>
+      <h2>Ác mộng khi deploy</h2>
+
+      <div class="process-container">
+        <div class="process-step" style="width: 240px">
+          <i class="fa-solid fa-pen process-icon"></i>
+          <div class="process-title">Thay đổi nhỏ</div>
+          <p style="font-size: 13px">Sửa lỗi chính tả</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step" style="width: 240px; border-color: var(--rd)">
+          <i
+            class="fa-solid fa-hourglass-half process-icon"
+            style="color: var(--rd)"
+          ></i>
+          <div class="process-title">Build lớn</div>
+          <p style="font-size: 13px">Build 2GB Source Code</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step" style="width: 240px; border-color: var(--rd)">
+          <i
+            class="fa-solid fa-skull process-icon"
+            style="color: var(--rd)"
+          ></i>
+          <div class="process-title">Downtime</div>
+          <p style="font-size: 13px">Restart toàn bộ Server</p>
+        </div>
+      </div>
+      <div class="slide-num">07</div>
+    </div>
+
+    <!-- SLIDE 8: Scalability Wall -->
+    <div class="slide-container">
+      <div class="f-code-badge">Black Friday Case</div>
+      <h2>Bức tường mang tên Scalability</h2>
+      <p>Black Friday: Nhu cầu Thanh toán tăng 500%. Video xem bình thường.</p>
+
+      <!-- Data: Need_Payment=100, Need_Video=20, Monolith_Provision=100. Max=100 -->
+      <div class="chart-container">
+        <!-- 20% -->
+        <div class="bar-group">
+          <span class="bar-val">20%</span>
+          <div class="bar bg-blue" style="height: 20%"></div>
+          <span class="bar-lbl">Video cần</span>
+        </div>
+        <!-- 100% -->
+        <div class="bar-group">
+          <span class="bar-val">500%</span>
+          <div class="bar bg-purple" style="height: 100%"></div>
+          <span class="bar-lbl">Payment cần</span>
+        </div>
+        <!-- 100% - Monolith must scale EVERYTHING to match the highest need -->
+        <div class="bar-group" style="width: 160px">
+          <span class="bar-val">Tổng</span>
+          <div class="bar bg-green" style="height: 100%; opacity: 0.5"></div>
+          <span class="bar-lbl">Cấu trúc Monolith</span>
+        </div>
+      </div>
+
+      <div
+        class="center"
+        style="position: absolute; bottom: 120px; right: 100px"
+      >
+        <p style="color: var(--rd); font-weight: 700">
+          <i class="fa-solid fa-arrow-left"></i> Tài nguyên bị lãng phí
+        </p>
+      </div>
+      <div class="slide-num">08</div>
+    </div>
+
+    <!-- SLIDE 9: Single Point of Failure -->
+    <div class="slide-container">
+      <div class="f-code-badge">Risk</div>
+      <h2>Điểm yếu duy nhất (Single Point of Failure)</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div class="code-block" style="border: 1px solid var(--rd)">
+          <span class="code-cmt">// Module Chat bị lỗi</span><br />
+          <span class="code-kw">while</span>(<span class="code-kw">true</span>)
+          {<br />
+          &nbsp;&nbsp;memory.consume();
+          <span class="code-cmt">// Memory Leak</span><br />
+          }
+        </div>
+
+        <div
+          class="process-step"
+          style="width: 100%; border-color: var(--rd); background: #fef2f2"
+        >
+          <i class="fa-solid fa-bomb process-icon" style="color: var(--rd)"></i>
+          <div class="process-title" style="color: var(--rd)">SYSTEM CRASH</div>
+          <p style="margin-top: 12px; color: var(--rd)">
+            Chat chết -> Server hết RAM ->
+            <strong>Thanh toán cũng chết theo.</strong>
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">09</div>
+    </div>
+
+    <!-- SLIDE 10: Enter Microservices -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Evolution</div>
+      <h2>Kiến trúc Microservices</h2>
+
+      <div class="grid-2" style="gap: 60px">
+        <div>
+          <div class="quote-clean" style="margin-top: 0">
+            "Chia nhỏ tảng đá nguyên khối thành những viên gạch độc lập."
+          </div>
+          <ul style="margin-top: 24px">
+            <li>
+              <i class="fa-solid fa-box-open" style="color: var(--bl)"></i>
+              Services độc lập
+            </li>
+            <li>
+              <i class="fa-solid fa-network-wired" style="color: var(--pp)"></i>
+              Giao tiếp qua mạng
+            </li>
+            <li>
+              <i class="fa-solid fa-rocket" style="color: var(--gr)"></i>
+              Deploy độc lập
+            </li>
+          </ul>
+        </div>
+        <div class="center">
+          <i
+            class="fa-solid fa-cubes-stacked"
+            style="font-size: 120px; color: var(--bl)"
+          ></i>
+        </div>
+      </div>
+      <div class="slide-num">10</div>
+    </div>
+
+    <!-- SLIDE 11: Decoupling Udemy -->
+    <div class="slide-container">
+      <div class="f-code-badge">Architecture</div>
+      <h2>Mổ xẻ Udemy (Decoupling)</h2>
+
+      <div
+        class="grid-2"
+        style="grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px"
+      >
+        <div class="process-step" style="width: auto; padding: 20px">
+          <i class="fa-solid fa-user process-icon" style="color: var(--bl)"></i>
+          <div class="process-title" style="font-size: 16px">User Svc</div>
+        </div>
+        <div class="process-step" style="width: auto; padding: 20px">
+          <i
+            class="fa-solid fa-video process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title" style="font-size: 16px">Course Svc</div>
+        </div>
+        <div class="process-step" style="width: auto; padding: 20px">
+          <i
+            class="fa-solid fa-credit-card process-icon"
+            style="color: var(--pp)"
+          ></i>
+          <div class="process-title" style="font-size: 16px">Payment Svc</div>
+        </div>
+        <div class="process-step" style="width: auto; padding: 20px">
+          <i
+            class="fa-solid fa-brain process-icon"
+            style="color: var(--rd)"
+          ></i>
+          <div class="process-title" style="font-size: 16px">AI Rec Svc</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 40px">
+        Mỗi Service chịu trách nhiệm duy nhất cho một nghiệp vụ.
+      </p>
+      <div class="slide-num">11</div>
+    </div>
+
+    <!-- SLIDE 12: Independent Technology -->
+    <div class="slide-container">
+      <div class="f-code-badge">Freedom</div>
+      <h2>TechStack độc lập</h2>
+      <p>Chọn công nghệ tốt nhất cho từng công việc cụ thể.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Tech Stack</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Payment</strong></td>
+              <td style="color: var(--rd); font-weight: 700">Java / Spring</td>
+              <td>Bảo mật, Ổn định, Type-safe</td>
+            </tr>
+            <tr>
+              <td><strong>Recommendation</strong></td>
+              <td style="color: var(--bl); font-weight: 700">Python</td>
+              <td>Thư viện AI/ML mạnh mẽ (Pandas, PyTorch)</td>
+            </tr>
+            <tr>
+              <td><strong>Realtime Chat</strong></td>
+              <td style="color: var(--gr); font-weight: 700">NodeJS</td>
+              <td>Non-blocking I/O, Event-driven</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-num">12</div>
+    </div>
+
+    <!-- SLIDE 13: Scale What You Need -->
+    <div class="slide-container">
+      <div class="f-code-badge">Black Friday Solved</div>
+      <h2>Scale module cần thiết</h2>
+      <p>Giải quyết bài toán Black Friday: Chỉ scale module Thanh toán.</p>
+
+      <!-- Data: Payment=10, User=5, Video=2. Max=10 -->
+      <div class="chart-container">
+        <!-- 2/10 = 20% -->
+        <div class="bar-group">
+          <span class="bar-val">2</span>
+          <div class="bar bg-blue" style="height: 20%"></div>
+          <span class="bar-lbl">Video Svc</span>
+        </div>
+        <!-- 5/10 = 50% -->
+        <div class="bar-group">
+          <span class="bar-val">5</span>
+          <div class="bar bg-green" style="height: 50%"></div>
+          <span class="bar-lbl">User Svc</span>
+        </div>
+        <!-- 10/10 = 100% -->
+        <div class="bar-group">
+          <span class="bar-val">10</span>
+          <div class="bar bg-purple" style="height: 100%"></div>
+          <span class="bar-lbl">Payment Svc</span>
+        </div>
+      </div>
+
+      <div class="center" style="margin-top: -20px">
+        <p style="color: var(--gr); font-weight: 700">
+          Tối ưu hóa chi phí hạ tầng triệt để.
+        </p>
+      </div>
+      <div class="slide-num">13</div>
+    </div>
+
+    <!-- SLIDE 14: Fault Isolation -->
+    <div class="slide-container">
+      <div class="f-code-badge">Resilience</div>
+      <h2>Cô lập lỗi (Fault Isolation)</h2>
+
+      <div class="process-container">
+        <div
+          class="process-step"
+          style="border-color: var(--rd); background: #fef2f2"
+        >
+          <i class="fa-solid fa-bomb process-icon" style="color: var(--rd)"></i>
+          <div class="process-title">AI Rec chết</div>
+          <p style="font-size: 13px">Gợi ý khóa học tạch</p>
+        </div>
+
+        <div style="font-size: 32px; color: var(--bd)">|</div>
+
+        <div
+          class="process-step"
+          style="border-color: var(--gr); background: #f0fdf4"
+        >
+          <i
+            class="fa-solid fa-shield-halved process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title">Main Site vẫn hoạt động</div>
+          <p style="font-size: 13px">User vẫn học bình thường</p>
+        </div>
+      </div>
+
+      <div class="quote-clean">
+        "Thà hỏng một phần (Partial Failure) còn hơn chết tất cả."
+      </div>
+      <div class="slide-num">14</div>
+    </div>
+
+    <!-- SLIDE 15: Database per Service -->
+    <div class="slide-container">
+      <div class="f-code-badge">Data Pattern</div>
+      <h2>Database cho mỗi Service</h2>
+      <p>Quy tắc vàng: Tránh Shared Database để không khóa bảng lẫn nhau.</p>
+
+      <div class="grid-2" style="justify-items: center">
+        <div class="center">
+          <div class="process-step" style="width: 200px; margin-bottom: 20px">
+            Service User
+          </div>
+          <i
+            class="fa-solid fa-database"
+            style="font-size: 40px; color: var(--bl)"
+          ></i>
+          <p>User DB</p>
+        </div>
+
+        <div class="center">
+          <div class="process-step" style="width: 200px; margin-bottom: 20px">
+            Service Course
+          </div>
+          <i
+            class="fa-solid fa-database"
+            style="font-size: 40px; color: var(--gr)"
+          ></i>
+          <p>Course DB</p>
+        </div>
+      </div>
+      <div class="slide-num">15</div>
+    </div>
+
+    <!-- SLIDE 16: Inter-Service Communication -->
+    <div class="slide-container">
+      <div class="f-code-badge">Communication</div>
+      <h2>Giao tiếp giữa các Service</h2>
+      <p>Data nằm riêng, làm sao hiển thị tên User trên trang Khóa học?</p>
+
+      <div class="process-container">
+        <div class="process-step" style="width: 220px">
+          <div class="process-title">Service Course</div>
+        </div>
+
+        <div style="text-align: center; width: 300px">
+          <div
+            style="
+              font-family: &quot;JetBrains Mono&quot;;
+              font-size: 14px;
+              color: var(--bl);
+              margin-bottom: 8px;
+            "
+          >
+            GET /users/123
+          </div>
+          <div style="border-top: 2px dashed var(--bd)"></div>
+          <div
+            style="
+              font-family: &quot;JetBrains Mono&quot;;
+              font-size: 14px;
+              color: var(--gr);
+              margin-top: 8px;
+            "
+          >
+            { "name": "Nam" }
+          </div>
+        </div>
+
+        <div class="process-step" style="width: 220px">
+          <div class="process-title">Service User</div>
+        </div>
+      </div>
+
+      <p style="text-align: center">
+        Sử dụng <strong>Internal API</strong> (REST hoặc gRPC).
+      </p>
+      <div class="slide-num">16</div>
+    </div>
+
+    <!-- SLIDE 17: API Gateway -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Pattern</div>
+      <h2>API Gateway (Người gác cổng)</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <div class="highlight-box">
+            <p>Client không thể nhớ IP của 50 Service khác nhau.</p>
+            <p style="margin-top: 10px">
+              <strong>Solution:</strong> Cửa ngõ duy nhất.
+            </p>
+          </div>
+          <ul style="margin-top: 20px">
+            <li>Routing (Điều hướng)</li>
+            <li>Authentication (Xác thực tập trung)</li>
+            <li>Rate Limiting</li>
+          </ul>
+        </div>
+
+        <div class="center">
+          <div
+            style="
+              background: var(--tx);
+              color: white;
+              padding: 20px 40px;
+              border-radius: 8px;
+              margin-bottom: 20px;
+              width: 100%;
+            "
+          >
+            API GATEWAY
+          </div>
+          <div style="display: flex; gap: 20px">
+            <div
+              style="
+                background: var(--sf);
+                padding: 10px;
+                border: 1px solid var(--bd);
+              "
+            >
+              Service 1
+            </div>
+            <div
+              style="
+                background: var(--sf);
+                padding: 10px;
+                border: 1px solid var(--bd);
+              "
+            >
+              Service 2
+            </div>
+            <div
+              style="
+                background: var(--sf);
+                padding: 10px;
+                border: 1px solid var(--bd);
+              "
+            >
+              Service 3
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">17</div>
+    </div>
+
+    <!-- SLIDE 18: Complexity Trade-off -->
+    <div class="slide-container">
+      <div class="f-code-badge">Reality Check</div>
+      <h2>Cái giá của sự hiện đại</h2>
+      <p>Microservices giải quyết vấn đề quy mô, nhưng đẻ ra vấn đề quản lý.</p>
+
+      <div class="grid-2">
+        <div class="process-step" style="width: 100%; border-color: var(--pp)">
+          <i
+            class="fa-solid fa-scale-balanced process-icon"
+            style="color: var(--pp)"
+          ></i>
+          <div class="process-title">Complexity</div>
+          <ul style="text-align: left; margin-top: 16px; font-size: 16px">
+            <li>Khó giám sát (Distributed Tracing)</li>
+            <li>Khó test tích hợp</li>
+            <li>Cần đội ngũ DevOps trình độ cao</li>
+          </ul>
+        </div>
+
+        <div class="code-block" style="height: 100%">
+          <span class="code-cmt"># Docker Compose Nightmare</span><br />
+          services:<br />
+          &nbsp;&nbsp;user: ...<br />
+          &nbsp;&nbsp;course: ...<br />
+          &nbsp;&nbsp;payment: ...<br />
+          &nbsp;&nbsp;gateway: ...<br />
+          <span class="code-cmt"># ...and 50 more lines</span>
+        </div>
+      </div>
+      <div class="slide-num">18</div>
+    </div>
+
+    <!-- SLIDE 19: Monolith vs Microservices -->
+    <div class="slide-container">
+      <div class="f-code-badge">Summary</div>
+      <h2>Monolith vs. Microservices</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Monolith</th>
+              <th>Microservices</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Complexity</strong></td>
+              <td style="color: var(--gr)">Thấp (Simple)</td>
+              <td style="color: var(--rd)">Cao (Complex)</td>
+            </tr>
+            <tr>
+              <td><strong>Scalability</strong></td>
+              <td style="color: var(--rd)">Kém (Scale all)</td>
+              <td style="color: var(--gr)">Tốt (Scale partial)</td>
+            </tr>
+            <tr>
+              <td><strong>Resilience</strong></td>
+              <td style="color: var(--rd)">Thấp (Sập toàn bộ)</td>
+              <td style="color: var(--gr)">Tốt (Cô lập lỗi)</td>
+            </tr>
+            <tr>
+              <td><strong>Phù hợp</strong></td>
+              <td>Startup / MVP</td>
+              <td>Enterprise / Big Scale</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-num">19</div>
+    </div>
+
+    <!-- SLIDE 20: Next Steps -->
+    <div class="slide-container">
+      <div class="f-code-badge">Bridge to Part 3</div>
+      <h2>Vấn đề tiếp theo: Giao tiếp giữa các Service</h2>
+
+      <div class="center">
+        <p style="font-size: 24px; margin-bottom: 40px">
+          "Chúng ta đã chia nhỏ Service, nhưng chúng nói chuyện với nhau bằng
+          cách nào hiệu quả nhất?"
+        </p>
+
+        <div class="grid-2" style="width: 100%; gap: 40px">
+          <div class="highlight-box" style="margin: 0">
+            <h3 style="margin-bottom: 8px">REST API?</h3>
+            <p style="font-size: 16px">Chuẩn mực, nhưng có chậm không?</p>
+          </div>
+          <div
+            class="highlight-box"
+            style="margin: 0; border-left-color: var(--pp)"
+          >
+            <h3 style="margin-bottom: 8px">WebSocket?</h3>
+            <p style="font-size: 16px">Cho Realtime Chat?</p>
+          </div>
+        </div>
+
+        <p style="margin-top: 40px; font-weight: 700; color: var(--tx2)">
+          Phần tiếp theo: Giao tiếp giữa các Service
+        </p>
+      </div>
+      <div class="slide-num">20</div>
+    </div>
+  </body>
+</html>

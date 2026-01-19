@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part 3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* INDUSTRIAL MINIMALISM CSS */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #e4e4e7;
+        --sl: #fff;
+        --sf: #f4f4f5;
+        --bd: #e4e4e7;
+        --tx: #18181b;
+        --tx2: #52525b;
+        --bl: #2563eb;
+        --pp: #9333ea;
+        --gr: #16a34a;
+        --rd: #dc2626;
+        --rad: 8px;
+        --sh:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      body {
+        background: var(--bg);
+        font-family: "Inter", sans-serif;
+        color: var(--tx);
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        background: var(--sl);
+        border: 1px solid #fff;
+        border-radius: var(--rad);
+        position: relative;
+        overflow: hidden;
+        padding: 60px 80px;
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: var(--sh);
+      }
+      .f-code-badge {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 99px;
+        padding: 6px 16px;
+        font-family: "JetBrains Mono";
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .slide-header {
+        position: absolute;
+        top: 28px;
+        left: 80px;
+        font-family: "JetBrains Mono";
+        font-size: 13px;
+        color: var(--tx2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h2 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--bl);
+        margin-bottom: 16px;
+      }
+      p,
+      li {
+        font-family: "JetBrains Mono";
+        font-size: 18px;
+        line-height: 1.6;
+        color: #3f3f46;
+        margin-bottom: 16px;
+      }
+      .highlight-box {
+        background: var(--sf);
+        border-left: 4px solid var(--bl);
+        padding: 24px;
+        border-radius: 0 var(--rad) var(--rad) 0;
+        margin: 24px 0;
+        color: var(--tx);
+      }
+      .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 60px;
+        height: 320px;
+        width: 100%;
+        border-bottom: 2px solid var(--bd);
+        margin: 20px 0 40px;
+        padding-bottom: 10px;
+      }
+      .bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        width: 120px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 4px 4px 0 0;
+        transition: height 0.5s;
+        background: var(--bl);
+      }
+      .bar-val {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--tx);
+      }
+      .bar-lbl {
+        margin-top: 12px;
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .bg-blue {
+        background: var(--bl);
+      }
+      .bg-purple {
+        background: var(--pp);
+      }
+      .bg-green {
+        background: var(--gr);
+      }
+      .process-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 40px 0;
+        width: 100%;
+        padding: 0 20px;
+      }
+      .process-step {
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 24px;
+        width: 260px;
+        text-align: center;
+      }
+      .process-icon {
+        font-size: 32px;
+        margin-bottom: 16px;
+        color: var(--tx);
+      }
+      .process-title {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .process-arrow {
+        color: var(--bd);
+        font-size: 24px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 24px;
+        border: 1px solid var(--bd);
+        border-radius: var(--rad);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+      }
+      th,
+      td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid var(--bd);
+      }
+      th {
+        background: var(--sf);
+        font-weight: 700;
+        color: var(--tx);
+      }
+      td {
+        color: #3f3f46;
+      }
+      .code-block {
+        background: #18181b;
+        color: #e4e4e7;
+        padding: 24px;
+        border-radius: var(--rad);
+        font-family: "JetBrains Mono";
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+        box-shadow: var(--sh);
+        border: 1px solid #27272a;
+      }
+      .code-kw {
+        color: #c084fc;
+      }
+      .code-str {
+        color: #4ade80;
+      }
+      .code-fn {
+        color: #60a5fa;
+      }
+      .code-cmt {
+        color: #71717a;
+        font-style: italic;
+      }
+      .quote-clean {
+        font-family: "Inter";
+        font-size: 28px;
+        font-weight: 300;
+        font-style: italic;
+        color: var(--tx);
+        border-left: 4px solid var(--gr);
+        padding-left: 32px;
+        margin: 40px 0;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+      }
+      .slide-num {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        color: var(--tx2);
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: Title -->
+    <div class="slide-container">
+      <div class="f-code-badge">Part 3: Protocols</div>
+      <div class="center">
+        <div style="display: flex; gap: 30px; margin-bottom: 32px">
+          <i
+            class="fa-solid fa-server"
+            style="font-size: 60px; color: var(--tx2)"
+          ></i>
+          <i
+            class="fa-solid fa-arrow-right-arrow-left"
+            style="font-size: 60px; color: var(--bl)"
+          ></i>
+          <i
+            class="fa-solid fa-laptop-code"
+            style="font-size: 60px; color: var(--tx2)"
+          ></i>
+        </div>
+        <h1>COMMUNICATION PROTOCOLS</h1>
+        <h2 style="font-size: 32px; color: var(--tx2); font-weight: 400">
+          RESTful API, GraphQL & WebSockets
+        </h2>
+        <div
+          class="highlight-box"
+          style="margin-top: 40px; border-left-color: var(--pp)"
+        >
+          <p style="margin: 0">
+            "Khi Client nói 'Hello', làm sao Server hiểu và trả lời đúng?"
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">01</div>
+    </div>
+
+    <!-- SLIDE 2: Pre-REST Era (SOAP) -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Past</div>
+      <h2>Trước khi có REST: SOAP/XML</h2>
+      <p>Thập niên 90: Dữ liệu bị gói trong những thẻ XML cồng kềnh.</p>
+
+      <div class="grid-2">
+        <div class="code-block" style="font-size: 13px">
+          <span class="code-cmt">&lt;!-- Request Mua khóa học --&gt;</span
+          ><br />
+          &lt;soap:Envelope xmlns:soap="..."&gt;<br />
+          &nbsp;&nbsp;&lt;soap:Body&gt;<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;m:BuyCourseRequest&gt;<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;id&gt;101&lt;/id&gt;<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;/m:BuyCourseRequest&gt;<br />
+          &nbsp;&nbsp;&lt;/soap:Body&gt;<br />
+          &lt;/soap:Envelope&gt;
+        </div>
+
+        <div>
+          <div
+            class="process-step"
+            style="width: 100%; border-color: var(--rd); margin-bottom: 20px"
+          >
+            <i
+              class="fa-solid fa-weight-hanging process-icon"
+              style="color: var(--rd)"
+            ></i>
+            <div class="process-title">Heavy</div>
+            <p style="font-size: 14px">Tốn băng thông vì quá nhiều thẻ thừa.</p>
+          </div>
+          <div
+            class="process-step"
+            style="width: 100%; border-color: var(--rd)"
+          >
+            <i
+              class="fa-solid fa-eye-slash process-icon"
+              style="color: var(--rd)"
+            ></i>
+            <div class="process-title">Hard to Read</div>
+            <p style="font-size: 14px">Khó đọc, khó debug cho con người.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">02</div>
+    </div>
+
+    <!-- SLIDE 3: REST Revolution -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Standard</div>
+      <h2>Cách mạng REST (2000)</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <div class="quote-clean" style="margin-top: 0">
+            "Đừng tạo ra quy tắc mới. Hãy dùng chính HTTP để thao tác dữ liệu."
+          </div>
+          <p style="margin-top: 24px">
+            <strong>Roy Fielding</strong> - Representational State Transfer
+          </p>
+        </div>
+
+        <div
+          class="center"
+          style="
+            background: var(--sf);
+            border-radius: 8px;
+            border: 1px solid var(--bd);
+          "
+        >
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              padding: 40px;
+            "
+          >
+            <div
+              style="
+                background: #dbeafe;
+                padding: 10px;
+                border-radius: 4px;
+                color: var(--bl);
+                font-weight: 700;
+              "
+            >
+              GET
+            </div>
+            <div
+              style="
+                background: #dcfce7;
+                padding: 10px;
+                border-radius: 4px;
+                color: var(--gr);
+                font-weight: 700;
+              "
+            >
+              POST
+            </div>
+            <div
+              style="
+                background: #fef9c3;
+                padding: 10px;
+                border-radius: 4px;
+                color: #a16207;
+                font-weight: 700;
+              "
+            >
+              PUT
+            </div>
+            <div
+              style="
+                background: #fee2e2;
+                padding: 10px;
+                border-radius: 4px;
+                color: var(--rd);
+                font-weight: 700;
+              "
+            >
+              DELETE
+            </div>
+          </div>
+          <p style="font-weight: 600">Standard HTTP Verbs</p>
+        </div>
+      </div>
+      <div class="slide-num">03</div>
+    </div>
+
+    <!-- SLIDE 4: Resource Oriented -->
+    <div class="slide-container">
+      <div class="f-code-badge">Concept</div>
+      <h2>Tư duy hướng Tài nguyên (Resource-Oriented Design)</h2>
+      <p>Mọi thứ trên Web là một "Tài nguyên" (Resource).</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Verb</th>
+              <th>Resource URL</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: var(--bl); font-weight: 700">GET</td>
+              <td>/courses</td>
+              <td>Lấy danh sách khóa học</td>
+            </tr>
+            <tr>
+              <td style="color: var(--gr); font-weight: 700">POST</td>
+              <td>/courses</td>
+              <td>Tạo mới một khóa học</td>
+            </tr>
+            <tr>
+              <td style="color: var(--pp); font-weight: 700">GET</td>
+              <td>/users/123</td>
+              <td>Lấy thông tin User ID 123</td>
+            </tr>
+            <tr>
+              <td style="color: var(--rd); font-weight: 700">DELETE</td>
+              <td>/courses/10</td>
+              <td>Xóa khóa học ID 10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-num">04</div>
+    </div>
+
+    <!-- SLIDE 5: JSON Rise -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Format</div>
+      <h2>Sự lên ngôi của JSON</h2>
+      <p>Cặp bài trùng hoàn hảo: REST + JSON.</p>
+
+      <div class="grid-2">
+        <div class="code-block" style="border: 1px solid var(--rd)">
+          <div class="code-cmt">&lt;!-- XML (Old) --&gt;</div>
+          &lt;user&gt;<br />
+          &nbsp;&nbsp;&lt;name&gt;Python&lt;/name&gt;<br />
+          &nbsp;&nbsp;&lt;id&gt;101&lt;/id&gt;<br />
+          &lt;/user&gt;
+        </div>
+
+        <div class="code-block" style="border: 1px solid var(--gr)">
+          <div class="code-cmt">// JSON (New Standard)</div>
+          {<br />
+          &nbsp;&nbsp;<span class="code-str">"name"</span>:
+          <span class="code-str">"Python"</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"id"</span>:
+          <span class="code-kw">101</span><br />
+          }
+        </div>
+      </div>
+
+      <div class="center" style="margin-top: 20px">
+        <p>
+          <i class="fa-solid fa-check" style="color: var(--gr)"></i> Gọn nhẹ
+          (Lightweight)
+        </p>
+        <p>
+          <i class="fa-solid fa-check" style="color: var(--gr)"></i> Mapping
+          trực tiếp vào Object code
+        </p>
+      </div>
+      <div class="slide-num">05</div>
+    </div>
+
+    <!-- SLIDE 6: Statelessness -->
+    <div class="slide-container">
+      <div class="f-code-badge">Feature</div>
+      <h2>Tính Phi trạng thái (Statelessness) & Lưu đệm (Caching)</h2>
+
+      <div class="process-container">
+        <div class="process-step">
+          <i class="fa-solid fa-mobile-screen process-icon"></i>
+          <div class="process-title">Client</div>
+        </div>
+
+        <div style="flex: 1; text-align: center; margin: 0 20px">
+          <p style="font-size: 14px; color: var(--bl)">
+            GET /courses (x100 lần)
+          </p>
+          <div style="height: 2px; background: var(--bd); margin: 10px 0"></div>
+          <p style="font-size: 14px; color: var(--gr)">Response from Cache</p>
+        </div>
+
+        <div
+          class="process-step"
+          style="border-color: var(--pp); background: #fdf4ff"
+        >
+          <i
+            class="fa-solid fa-layer-group process-icon"
+            style="color: var(--pp)"
+          ></i>
+          <div class="process-title">Cache Layer</div>
+          <p style="font-size: 12px; margin-top: 8px">Trả lời ngay lập tức</p>
+        </div>
+
+        <div style="flex: 0.2; border-bottom: 2px dashed var(--bd)"></div>
+
+        <div class="process-step" style="opacity: 0.5">
+          <i class="fa-solid fa-database process-icon"></i>
+          <div class="process-title">DB</div>
+          <p style="font-size: 12px">(Idle)</p>
+        </div>
+      </div>
+      <div class="slide-num">06</div>
+    </div>
+
+    <!-- SLIDE 7: REST Limitation -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Problem</div>
+      <h2>Giới hạn của REST</h2>
+      <p>Bối cảnh Mobile (3G/4G) làm lộ rõ điểm yếu của sự cứng nhắc.</p>
+
+      <div class="grid-2" style="align-items: center">
+        <div class="center">
+          <i
+            class="fa-solid fa-signal"
+            style="font-size: 60px; color: var(--rd); margin-bottom: 20px"
+          ></i>
+          <h3>Unstable Network</h3>
+          <p>Mạng chập chờn, băng thông thấp.</p>
+        </div>
+        <div>
+          <div class="highlight-box" style="border-left-color: var(--rd)">
+            <strong>Vấn đề cốt lõi:</strong>
+            <ul style="margin-top: 16px">
+              <li>Cấu trúc dữ liệu trả về bị "đóng đinh" (Fixed).</li>
+              <li>Không thể tùy chỉnh theo màn hình thiết bị.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">07</div>
+    </div>
+
+    <!-- SLIDE 8: Over-fetching -->
+    <div class="slide-container">
+      <div class="f-code-badge">Problem 1</div>
+      <h2>Vấn đề: Lấy thừa (Over-fetching)</h2>
+
+      <div class="grid-2">
+        <div class="process-step" style="width: 100%; text-align: left">
+          <div class="process-title" style="margin-bottom: 10px">
+            Mobile Screen Cần:
+          </div>
+          <ul style="padding-left: 20px; color: var(--gr)">
+            <li>Title</li>
+            <li>Price</li>
+          </ul>
+        </div>
+
+        <div class="code-block" style="border: 1px solid var(--rd)">
+          <div class="code-cmt">// REST trả về tất cả:</div>
+          {<br />
+          &nbsp;&nbsp;<span class="code-str">"title"</span>:
+          <span class="code-str">"Java"</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"price"</span>:
+          <span class="code-kw">10$</span>,<br />
+          &nbsp;&nbsp;<span style="color: var(--rd)"
+            >"desc": "Bài văn 1000 chữ...",</span
+          ><br />
+          &nbsp;&nbsp;<span style="color: var(--rd)"
+            >"created_at": "2023...",</span
+          ><br />
+          &nbsp;&nbsp;<span style="color: var(--rd)">"author_bio": "..."</span
+          ><br />
+          }
+        </div>
+      </div>
+      <p style="text-align: center; color: var(--rd); margin-top: 20px">
+        Lãng phí băng thông 3G của người dùng.
+      </p>
+      <div class="slide-num">08</div>
+    </div>
+
+    <!-- SLIDE 9: Under-fetching -->
+    <div class="slide-container">
+      <div class="f-code-badge">Problem 2</div>
+      <h2>Vấn đề: Lấy thiếu (Under-fetching)</h2>
+      <p>Cần hiển thị: Course + Author + Comments.</p>
+
+      <div class="process-container" style="justify-content: center; gap: 40px">
+        <div class="bar-group" style="width: auto">
+          <div
+            class="process-step"
+            style="padding: 10px; width: 200px; margin-bottom: 10px"
+          >
+            GET /course/1
+          </div>
+          <div
+            class="process-step"
+            style="padding: 10px; width: 200px; margin-bottom: 10px"
+          >
+            GET /user/99
+          </div>
+          <div class="process-step" style="padding: 10px; width: 200px">
+            GET /comments
+          </div>
+        </div>
+
+        <div style="font-size: 40px; color: var(--rd)">
+          <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <div class="center">
+          <h3 style="color: var(--rd)">N+1 Problem</h3>
+          <p>Độ trễ (Latency) x3</p>
+        </div>
+      </div>
+      <div class="slide-num">09</div>
+    </div>
+
+    <!-- SLIDE 10: Enter GraphQL -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Solution</div>
+      <h2>GraphQL (2015)</h2>
+
+      <div class="center">
+        <i
+          class="fa-brands fa-facebook"
+          style="font-size: 60px; color: var(--bl); margin-bottom: 20px"
+        ></i>
+        <div class="quote-clean">
+          "Hãy hỏi chính xác những gì bạn cần, tôi sẽ trả lời đúng như thế."
+        </div>
+        <p><b>Lee Byron</b>(Engineering lead), người công bố GraphQL tại React.js Conf 2015 cùng <b>Nick Schrock</b>(Lead architect) và <b>Brandon Krieg</b>(Contributor chính trong giai đoạn open source)</p>
+      </div>
+      <div class="slide-num">10</div>
+    </div>
+
+    <!-- SLIDE 11: Single Endpoint Magic -->
+    <div class="slide-container">
+      <div class="f-code-badge">GraphQL Concept</div>
+      <h2>Phép màu của Single Endpoint</h2>
+      <p>Chỉ có đúng 1 URL duy nhất: <strong>/graphql</strong></p>
+
+      <div class="grid-2">
+        <div class="code-block">
+          <div class="code-cmt"># Client Query</div>
+          <span class="code-kw">query</span> {<br />
+          &nbsp;&nbsp;course(<span class="code-fn">id</span>:
+          <span class="code-kw">1</span>) {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;title<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;price<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;instructor {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avatar<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+          &nbsp;&nbsp;}<br />
+          }
+        </div>
+        <div class="center">
+          <i
+            class="fa-solid fa-wand-magic-sparkles"
+            style="font-size: 80px; color: var(--pp)"
+          ></i>
+          <p style="margin-top: 20px">Client toàn quyền quyết định dữ liệu.</p>
+        </div>
+      </div>
+      <div class="slide-num">11</div>
+    </div>
+
+    <!-- SLIDE 12: Precise Response -->
+    <div class="slide-container">
+      <div class="f-code-badge">Result</div>
+      <h2>Phản hồi chính xác (The Precise Response)</h2>
+      <p>Server trả về đúng cấu trúc yêu cầu. Không thừa 1 byte.</p>
+
+      <div class="grid-2">
+        <div class="code-block" style="border: 2px solid var(--pp)">
+          <div class="code-cmt"># Query (Input)</div>
+          ...<br />
+          &nbsp;&nbsp;title<br />
+          &nbsp;&nbsp;price<br />
+          ...
+        </div>
+
+        <div class="code-block" style="border: 2px solid var(--gr)">
+          <div class="code-cmt">// JSON (Output)</div>
+          {<br />
+          &nbsp;&nbsp;<span class="code-str">"data"</span>: {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"course"</span>: {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str"
+            >"title"</span
+          >: <span class="code-str">"Java"</span>,<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str"
+            >"price"</span
+          >: <span class="code-kw">10</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+          &nbsp;&nbsp;}<br />
+          }
+        </div>
+      </div>
+      <div class="slide-num">12</div>
+    </div>
+
+    <!-- SLIDE 13: Flexibility -->
+    <div class="slide-container">
+      <div class="f-code-badge">Benefit</div>
+      <h2>Sự tự do cho Frontend</h2>
+
+      <div class="highlight-box" style="border-left-color: var(--pp)">
+        <h3>
+          <i class="fa-solid fa-unlock" style="margin-right: 12px"></i>No more
+          "Backend Please"
+        </h3>
+        <p>
+          Frontend Dev không cần nhờ Backend sửa API khi muốn thêm trường dữ
+          liệu.
+        </p>
+      </div>
+
+      <p style="margin-top: 20px">
+        Ứng dụng mạnh mẽ cho: <strong>Tìm kiếm & Lọc (Filter)</strong> phức tạp.
+      </p>
+      <div class="slide-num">13</div>
+    </div>
+
+    <!-- SLIDE 14: REST vs GraphQL -->
+    <div class="slide-container">
+      <div class="f-code-badge">Comparison</div>
+      <h2>REST vs. GraphQL: Khi nào dùng ai?</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tiêu chí</th>
+              <th>REST</th>
+              <th>GraphQL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Caching</strong></td>
+              <td style="color: var(--gr)">Tuyệt vời (HTTP Cache)</td>
+              <td style="color: var(--tx2)">Khó (Phải tự làm)</td>
+            </tr>
+            <tr>
+              <td><strong>Complexity</strong></td>
+              <td style="color: var(--gr)">Đơn giản</td>
+              <td style="color: var(--rd)">Phức tạp (Learning Curve)</td>
+            </tr>
+            <tr>
+              <td><strong>Data Shape</strong></td>
+              <td style="color: var(--rd)">Cứng nhắc (Fixed)</td>
+              <td style="color: var(--gr)">Linh hoạt (Flexible)</td>
+            </tr>
+            <tr>
+              <td><strong>Use Case</strong></td>
+              <td>Public API, File Upload</td>
+              <td>Complex Mobile App, Dashboard</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-num">14</div>
+    </div>
+
+    <!-- SLIDE 15: Realtime Challenge -->
+    <div class="slide-container">
+      <div class="f-code-badge">Realtime</div>
+      <h2>Bài toán Real-time</h2>
+      <p>Nhu cầu: Chat, Thông báo, Live Class.</p>
+
+      <div class="grid-2" style="align-items: center">
+        <div
+          class="process-step"
+          style="width: 100%; border-color: var(--rd); background: #fef2f2"
+        >
+          <i
+            class="fa-solid fa-ear-listen process-icon"
+            style="color: var(--rd)"
+          ></i>
+          <div class="process-title">HTTP Problem</div>
+          <p style="margin-top: 12px">
+            Server thụ động. Không thể tự nói "Này, có tin nhắn mới".
+          </p>
+        </div>
+
+        <div class="center">
+          <i
+            class="fa-regular fa-comment-dots"
+            style="font-size: 80px; color: var(--tx2)"
+          ></i>
+        </div>
+      </div>
+      <div class="slide-num">15</div>
+    </div>
+
+    <!-- SLIDE 16: Polling (Old Way) -->
+    <div class="slide-container">
+      <div class="f-code-badge">Old Solution</div>
+      <h2>Polling: Hỏi liên tục</h2>
+
+      <div class="process-container">
+        <div class="process-step" style="width: 150px">Client</div>
+
+        <div style="flex: 1; margin: 0 20px">
+          <div style="text-align: center; margin-bottom: 10px; font-size: 14px">
+            1s: Có tin chưa? -> Chưa
+          </div>
+          <div style="text-align: center; margin-bottom: 10px; font-size: 16px">
+            2s: Có tin chưa? -> Chưa
+          </div>
+          <div
+            style="
+              text-align: center;
+              margin-bottom: 10px;
+              font-size: 18px;
+              color: var(--rd);
+            "
+          >
+            3s: Có tin chưa? -> Chưa
+          </div>
+        </div>
+
+        <div class="process-step" style="width: 150px">Server</div>
+      </div>
+
+      <div class="center">
+        <p style="color: var(--rd); font-weight: 700; font-size: 30px">
+           <b>--> Server Overload & Lãng phí tài nguyên.</b>
+        </p>
+      </div>
+      <div class="slide-num">16</div>
+    </div>
+
+    <!-- SLIDE 17: Enter WebSockets -->
+    <div class="slide-container">
+      <div class="f-code-badge">The Solution</div>
+      <h2>WebSockets (2011)</h2>
+      <p>Giao thức Full-duplex (Song công) qua kết nối TCP bền vững.</p>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <div class="highlight-box">
+            <p>Thay vì gửi thư tay (HTTP)...</p>
+            <p style="font-weight: 700; color: var(--bl); margin-top: 8px">
+              ...Ta nối một đường dây điện thoại và giữ máy liên tục.
+            </p>
+          </div>
+        </div>
+        <div class="center">
+          <i
+            class="fa-solid fa-plug"
+            style="font-size: 80px; color: var(--gr)"
+          ></i>
+          <p style="margin-top: 20px; font-weight: 700">
+            Persistent Connection
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">17</div>
+    </div>
+
+    <!-- SLIDE 18: Handshake -->
+    <div class="slide-container">
+      <div class="f-code-badge">Mechanism</div>
+      <h2>Cơ chế Handshake</h2>
+
+      <div class="code-block">
+        <span class="code-kw">GET</span> <span class="code-str">/chat</span>
+        <span class="code-kw">HTTP</span>/1.1<br />
+        <span class="code-fn">Host</span>: server.com<br />
+        <span class="code-fn">Upgrade</span>: websocket<br />
+        <span class="code-fn">Connection</span>: Upgrade<br />
+        <br />
+        <span class="code-cmt">// Server Response:</span><br />
+        <span class="code-kw">HTTP</span>/1.1
+        <span class="code-str">101 Switching Protocols</span>
+      </div>
+
+      <div class="center">
+        <i
+          class="fa-solid fa-handshake"
+          style="font-size: 40px; color: var(--pp)"
+        ></i>
+        <p style="margin-top: 10px">HTTP đóng lại -> WebSocket mở ra.</p>
+      </div>
+      <div class="slide-num">18</div>
+    </div>
+
+    <!-- SLIDE 19: Push Model -->
+    <div class="slide-container">
+      <div class="f-code-badge">Mechanism</div>
+      <h2>The Push Model (Đẩy)</h2>
+
+      <div class="process-container">
+        <div class="process-step" style="width: 180px">
+          <i class="fa-solid fa-user process-icon"></i>
+          User A (Send)
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div
+          class="center"
+          style="background: var(--sf); padding: 20px; border-radius: 8px"
+        >
+          <i class="fa-solid fa-server"></i>
+          <p style="font-size: 14px">Server</p>
+        </div>
+
+        <i class="fa-solid fa-bolt process-arrow" style="color: var(--pp)"></i>
+
+        <div class="process-step" style="width: 180px; border-color: var(--pp)">
+          <i
+            class="fa-solid fa-mobile-screen process-icon"
+            style="color: var(--pp)"
+          ></i>
+          User B (Receive)
+        </div>
+      </div>
+
+      <p style="text-align: center">
+        Server chủ động <strong>PUSH</strong> tin nhắn ngay lập tức. Độ trễ ~0.
+      </p>
+      <div class="slide-num">19</div>
+    </div>
+
+    <!-- SLIDE 20: Summary & Next -->
+    <div class="slide-container">
+      <div class="f-code-badge">Wrap Up</div>
+      <h2>Chọn công cụ phù hợp</h2>
+
+      <div class="grid-2">
+        <div class="highlight-box" style="margin: 0">
+          <ul style="padding-left: 20px; font-size: 16px">
+            <li style="margin-bottom: 12px">
+              <strong>REST:</strong> Quản lý User, CRUD cơ bản.
+            </li>
+            <li style="margin-bottom: 12px">
+              <strong>GraphQL:</strong> App phức tạp, tối ưu Mobile.
+            </li>
+            <li><strong>WebSocket:</strong> Chat, Live Class.</li>
+          </ul>
+        </div>
+
+        <div class="center">
+          <p style="font-size: 20px; font-weight: 700; margin-bottom: 20px">
+            Chúng ta đã có đủ mảnh ghép:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 10px; align-items: center">
+            <span
+              style="
+                background: var(--gr);
+                padding: 4px 10px;
+                border-radius: 4px;
+                font-size: 30px;
+              "
+              >Kiến thức</span
+            >
+            <span
+              style="
+                background: var(--rd);
+                padding: 4px 10px;
+                border-radius: 4px;
+                font-size: 16px;
+              "
+              ><del>Kinh nghiệm</del></span
+            >
+            <span
+              style="
+                background: var(--rd);
+                padding: 4px 10px;
+                border-radius: 4px;
+                font-size: 16px;
+              "
+              ><del>Trải nghiệm</del></span
+            >
+          </div>
+          <p style="margin-top: 30px; color: var(--bl); font-weight: 700">
+            Phần tiếp theo: Thiết kế hệ thống
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">20</div>
+    </div>
+  </body>
+</html>

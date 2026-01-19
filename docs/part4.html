@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part 4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* INDUSTRIAL MINIMALISM CSS */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #e4e4e7;
+        --sl: #fff;
+        --sf: #f4f4f5;
+        --bd: #e4e4e7;
+        --tx: #18181b;
+        --tx2: #52525b;
+        --bl: #2563eb;
+        --pp: #9333ea;
+        --gr: #16a34a;
+        --rd: #dc2626;
+        --rad: 8px;
+        --sh: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      body {
+        background: var(--bg);
+        font-family: "Inter", sans-serif;
+        color: var(--tx);
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .slide-container {
+        width: 1280px;
+        height: 720px;
+        background: var(--sl);
+        border: 1px solid #fff;
+        border-radius: var(--rad);
+        position: relative;
+        overflow: hidden;
+        padding: 60px 80px;
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: var(--sh);
+      }
+      .f-code-badge {
+        position: absolute;
+        top: 24px;
+        right: 32px;
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 99px;
+        padding: 6px 16px;
+        font-family: "JetBrains Mono";
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .slide-header {
+        position: absolute;
+        top: 28px;
+        left: 80px;
+        font-family: "JetBrains Mono";
+        font-size: 13px;
+        color: var(--tx2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h2 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--tx);
+        letter-spacing: -0.025em;
+      }
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--bl);
+        margin-bottom: 16px;
+      }
+      p,
+      li {
+        font-family: "JetBrains Mono";
+        font-size: 18px;
+        line-height: 1.6;
+        color: #3f3f46;
+        margin-bottom: 16px;
+      }
+      .highlight-box {
+        background: var(--sf);
+        border-left: 4px solid var(--bl);
+        padding: 24px;
+        border-radius: 0 var(--rad) var(--rad) 0;
+        margin: 24px 0;
+        color: var(--tx);
+      }
+      .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 60px;
+        height: 320px;
+        width: 100%;
+        border-bottom: 2px solid var(--bd);
+        margin: 20px 0 40px;
+        padding-bottom: 10px;
+      }
+      .bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        width: 120px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 4px 4px 0 0;
+        transition: height 0.5s;
+        background: var(--bl);
+      }
+      .bar-val {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--tx);
+      }
+      .bar-lbl {
+        margin-top: 12px;
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx2);
+      }
+      .bg-blue {
+        background: var(--bl);
+      }
+      .bg-purple {
+        background: var(--pp);
+      }
+      .bg-green {
+        background: var(--gr);
+      }
+      .process-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 40px 0;
+        width: 100%;
+        padding: 0 20px;
+      }
+      .process-step {
+        background: var(--sf);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 24px;
+        width: 260px;
+        text-align: center;
+      }
+      .process-icon {
+        font-size: 32px;
+        margin-bottom: 16px;
+        color: var(--tx);
+      }
+      .process-title {
+        font-family: "Inter";
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .process-arrow {
+        color: var(--bd);
+        font-size: 24px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 24px;
+        border: 1px solid var(--bd);
+        border-radius: var(--rad);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+      }
+      th,
+      td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid var(--bd);
+      }
+      th {
+        background: var(--sf);
+        font-weight: 700;
+        color: var(--tx);
+      }
+      td {
+        color: #3f3f46;
+      }
+      .code-block {
+        background: #18181b;
+        color: #e4e4e7;
+        padding: 24px;
+        border-radius: var(--rad);
+        font-family: "JetBrains Mono";
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+        box-shadow: var(--sh);
+        border: 1px solid #27272a;
+      }
+      .code-kw {
+        color: #c084fc;
+      }
+      .code-str {
+        color: #4ade80;
+      }
+      .code-fn {
+        color: #60a5fa;
+      }
+      .code-cmt {
+        color: #71717a;
+        font-style: italic;
+      }
+      .quote-clean {
+        font-family: "Inter";
+        font-size: 28px;
+        font-weight: 300;
+        font-style: italic;
+        color: var(--tx);
+        border-left: 4px solid var(--gr);
+        padding-left: 32px;
+        margin: 40px 0;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+      }
+      .slide-num {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        color: var(--tx2);
+        font-family: "JetBrains Mono";
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: Title -->
+    <div class="slide-container">
+      <div class="f-code-badge">Part 4: Implementation</div>
+      <div class="center">
+        <i
+          class="fa-solid fa-code-branch"
+          style="font-size: 80px; color: var(--bl); margin-bottom: 32px"
+        ></i>
+        <h1 style="font-size: 56px">F-CODE PLATFORM<br />SYSTEM DESIGN</h1>
+        <h2 style="font-size: 32px; color: var(--tx2); font-weight: 400">
+          Xây dựng nền tảng với React & Node.js
+        </h2>
+        <div
+          class="highlight-box"
+          style="margin-top: 40px; border-left-color: var(--gr)"
+        >
+          <p style="margin: 0">
+            "Chúng ta đã có công cụ (Part 1-3), giờ hãy xem cách xây dựng 'ngôi
+            nhà' này."
+          </p>
+        </div>
+      </div>
+      <div class="slide-num">01</div>
+    </div>
+
+    <!-- SLIDE 2: Architecture -->
+    <div class="slide-container">
+      <div class="f-code-badge">Overview</div>
+      <h2>System Architecture</h2>
+      <p>Mô hình: <strong>Node.js Monolith Layered Architecture</strong>.</p>
+
+      <div class="process-container">
+        <div class="process-step">
+          <i
+            class="fa-brands fa-react process-icon"
+            style="color: var(--bl)"
+          ></i>
+          <div class="process-title">Client</div>
+          <p style="font-size: 14px; margin-top: 8px">ReactJS</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right-arrow-left process-arrow"></i>
+
+        <div class="process-step" style="border-color: var(--gr)">
+          <i
+            class="fa-brands fa-node process-icon"
+            style="color: var(--gr)"
+          ></i>
+          <div class="process-title">Monolith API</div>
+          <p style="font-size: 14px; margin-top: 8px">Node/Express</p>
+        </div>
+
+        <i class="fa-solid fa-database process-arrow"></i>
+
+        <div class="process-step" style="border-color: var(--pp)">
+          <img
+            src="./asset/mysql-logo.png"
+            alt="MySQL"
+            style="width: 32px; height: 32px; object-fit: contain; margin-bottom: 16px"
+          />
+          <div class="process-title">Database</div>
+          <p style="font-size: 14px; margin-top: 8px">MySQL</p>
+        </div>
+      </div>
+
+      <div class="center" style="margin-top: 20px">
+        <p style="font-size: 14px; color: var(--tx2)">
+          Reason: Phù hợp quy mô MVP, dễ triển khai, clean code.
+        </p>
+      </div>
+      <div class="slide-num">02</div>
+    </div>
+
+    <!-- SLIDE 3: Backend Stack -->
+    <div class="slide-container">
+      <div class="f-code-badge">Tech Stack</div>
+      <h2>Backend</h2>
+
+      <div class="grid-2">
+        <div class="highlight-box" style="margin: 0">
+          <ul style="padding-left: 20px">
+            <li style="margin-bottom: 20px">
+              <strong>Runtime:</strong> Node.js (v18+) <br /><span
+                style="font-size: 14px; color: var(--tx2)"
+                >Hiệu năng cao nhờ Non-blocking I/O</span
+              >
+            </li>
+            <li style="margin-bottom: 20px">
+              <strong>Framework:</strong> Express 5 <br /><span
+                style="font-size: 14px; color: var(--tx2)"
+                >Xử lý routing và middleware mạnh mẽ</span
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="highlight-box"
+          style="margin: 0; border-left-color: var(--pp)"
+        >
+          <ul style="padding-left: 20px">
+            <li style="margin-bottom: 20px">
+              <strong>Database:</strong> MySQL 8.0 <br /><span
+                style="font-size: 14px; color: var(--tx2)"
+                >RDBMS đảm bảo tính toàn vẹn dữ liệu</span
+              >
+            </li>
+            <li style="margin-bottom: 20px">
+              <strong>ORM:</strong> Sequelize 6 <br /><span
+                style="font-size: 14px; color: var(--tx2)"
+                >Tương tác với DB bằng Models thay vì viết SQL thô</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">03</div>
+    </div>
+
+    <!-- SLIDE 4: Frontend Stack -->
+    <div class="slide-container">
+      <div class="f-code-badge">Tech Stack</div>
+      <h2>Frontend</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div>
+          <div
+            class="process-step"
+            style="width: 100%; text-align: left; margin-bottom: 20px"
+          >
+            <i
+              class="fa-brands fa-react"
+              style="color: var(--bl); margin-right: 12px"
+            ></i>
+            <strong>React 19</strong> (Component-based UI)
+          </div>
+          <div
+            class="process-step"
+            style="
+              width: 100%;
+              text-align: left;
+              margin-bottom: 20px;
+              border-color: var(--bl);
+            "
+          >
+            <i
+              class="fa-solid fa-palette"
+              style="color: var(--bl); margin-right: 12px"
+            ></i>
+            <strong>Material-UI 7</strong> (Google Design)
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-cmt">// Communication</div>
+          import <span class="code-kw">axios</span> from 'axios';
+          <span class="code-cmt">// REST</span><br />
+          import { <span class="code-fn">io</span> } from 'socket.io-client';
+          <span class="code-cmt">// Realtime</span>
+        </div>
+      </div>
+      <div class="slide-num">04</div>
+    </div>
+
+    <!-- SLIDE 5: Project Structure -->
+    <!-- SLIDE 5: Project Structure (Updated) -->
+    <div class="slide-container">
+      <div class="f-code-badge">Clean Architecture</div>
+      <h2>Tổ chức mã nguồn</h2>
+      <p>Tổ chức mã nguồn theo chuẩn Modularization.</p>
+
+      <div class="grid-2">
+        <div class="code-block" style="font-size: 17px; line-height: 1.6">
+          backend/<br />
+          ├── <span class="code-kw">server.js</span>
+          <span class="code-cmt"># Entry Point</span><br />
+          └── <span class="code-fn">src/</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="code-fn">config/</span>
+          <span class="code-cmt"># Configs</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="code-fn">controllers/</span>
+          <span class="code-cmt"># Logic</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="code-fn">middlewares/</span>
+          <span class="code-cmt"># Interceptors</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="code-fn">models/</span>
+          <span class="code-cmt"># Database</span><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="code-fn">routes/</span>
+          <span class="code-cmt"># Endpoints</span>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom: 20px; color: var(--bl)">Components</h3>
+          <ul style="list-style: none; font-size: 15px; color: var(--tx)">
+            <li style="margin-bottom: 12px">
+              <strong style="color: var(--pp)">server.js:</strong> Khởi tạo App,
+              kết nối Server & Socket.io.
+            </li>
+            <li style="margin-bottom: 12px">
+              <strong style="color: var(--pp)">config/:</strong> Cấu hình
+              Database, biến môi trường (Env).
+            </li>
+            <li style="margin-bottom: 12px">
+              <strong style="color: var(--pp)">controllers/:</strong> Nhận
+              Request, xử lý nghiệp vụ, trả Response.
+            </li>
+            <li style="margin-bottom: 12px">
+              <strong style="color: var(--pp)">middlewares/:</strong> Lớp trung
+              gian (Check Token, Validate Input).
+            </li>
+            <li style="margin-bottom: 12px">
+              <strong style="color: var(--pp)">models/:</strong> Định nghĩa cấu
+              trúc bảng (User, Course) qua ORM.
+            </li>
+            <li>
+              <strong style="color: var(--pp)">routes/:</strong> Định tuyến URL
+              (VD: GET /api/users trỏ về đâu?).
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">05</div>
+    </div>
+
+    <!-- SLIDE 6: DB Choice -->
+    <div class="slide-container">
+      <div class="f-code-badge">Database</div>
+      <h2>Tại sao dùng MySQL?</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div class="center">
+          <i
+            class="fa-solid fa-database"
+            style="font-size: 100px; color: var(--bl)"
+          ></i>
+          <h3 style="margin-top: 20px">Relational DB</h3>
+        </div>
+
+        <div>
+          <div
+            class="process-step"
+            style="
+              width: 100%;
+              text-align: left;
+              margin-bottom: 20px;
+              border-color: var(--gr);
+            "
+          >
+            <i
+              class="fa-solid fa-key"
+              style="color: var(--gr); margin-right: 12px"
+            ></i>
+            <strong>Foreign Keys:</strong> Đảm bảo dữ liệu chặt chẽ.
+          </div>
+          <div
+            class="process-step"
+            style="width: 100%; text-align: left; border-color: var(--rd)"
+          >
+            <i
+              class="fa-solid fa-trash-can"
+              style="color: var(--rd); margin-right: 12px"
+            ></i>
+            <strong>Cascade Delete:</strong> Xóa User -> Tự động xóa Enrollment.
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">06</div>
+    </div>
+
+    <!-- SLIDE 7: Entities -->
+    <div class="slide-container">
+      <div class="f-code-badge">Schema</div>
+      <h2>Các Entity chính (Core Entities)</h2>
+
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          margin-top: 40px;
+        "
+      >
+        <img
+          src="./asset/ERD.gif"
+          alt="ER Diagram"
+          style="max-width: 100%; max-height: 500px; border-radius: 8px"
+        />
+      </div>
+      <div class="slide-num">07</div>
+    </div>
+
+    <!-- SLIDE 8: Content Hierarchy -->
+    <div class="slide-container">
+      <div class="f-code-badge">Schema</div>
+      <h2>Cấu trúc nội dung phân cấp</h2>
+
+      <div class="grid-2">
+
+        <div
+          class="process-step"
+          style="width: 100%; border: 2px solid var(--bl); background: #eff6ff"
+        >
+          <i class="fa-solid fa-layer-group" style="color: var(--bl)"></i>
+          <h3>Course</h3>
+          <p style="font-size: 14px">Root Entity</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div
+            class="process-step"
+            style="width: 100%; border-color: var(--pp)"
+          >
+            <i class="fa-solid fa-folder-open" style="color: var(--pp)"></i>
+            <strong>Chapters</strong> (Section 1, 2...)
+          </div>
+
+          <div
+            class="process-step"
+            style="width: 100%; border-color: var(--gr)"
+          >
+            <i class="fa-solid fa-file-video" style="color: var(--gr)"></i>
+            <strong>Lessons</strong> (Video, Quiz, Doc)
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">08</div>
+    </div>
+
+    <!-- SLIDE 9: Progress & Chat Schema -->
+    <div class="slide-container">
+      <div class="f-code-badge">Features DB</div>
+      <h2>Theo dõi & Chat</h2>
+
+      <div class="grid-2">
+        <div class="code-block">
+          <div class="code-cmt">// Table: LessonProgress</div>
+          {<br />
+          &nbsp;&nbsp;<span class="code-str">"user_id"</span>:
+          <span class="code-kw">1</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"lesson_id"</span>:
+          <span class="code-kw">50</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"is_completed"</span>:
+          <span class="code-kw">false</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"last_second"</span>:
+          <span class="code-kw">120</span>
+          <span class="code-cmt">/* Resume here */</span><br />
+          }
+        </div>
+
+        <div class="code-block">
+          <div class="code-cmt">// Table: Messages</div>
+          {<br />
+          &nbsp;&nbsp;<span class="code-str">"sender_id"</span>:
+          <span class="code-kw">1</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"receiver_id"</span>:
+          <span class="code-kw">2</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"content"</span>:
+          <span class="code-str">"Thầy ơi..."</span>,<br />
+          &nbsp;&nbsp;<span class="code-str">"created_at"</span>:
+          <span class="code-kw">TIMESTAMP</span><br />
+          }
+        </div>
+      </div>
+      <div class="slide-num">09</div>
+    </div>
+
+    <!-- SLIDE 10: Communication Strategy -->
+    <div class="slide-container">
+      <div class="f-code-badge">Data Flow</div>
+      <h2>Chiến lược giao tiếp: Hybrid</h2>
+      <p>Kết hợp giữa sự chuẩn mực (REST) và tốc độ (WebSocket).</p>
+
+      <!-- Data: REST=90, Socket=10. Max=90. -->
+      <div class="chart-container">
+        <!-- 90/90 = 100% -->
+        <div class="bar-group" style="width: 200px">
+          <span class="bar-val">90%</span>
+          <div class="bar bg-blue" style="height: 100%"></div>
+          <span class="bar-lbl">REST API (CRUD)</span>
+        </div>
+        <!-- 10/90 = ~11% -->
+        <div class="bar-group" style="width: 200px">
+          <span class="bar-val">10%</span>
+          <div class="bar bg-purple" style="height: 11%"></div>
+          <span class="bar-lbl">Socket.io (Chat)</span>
+        </div>
+      </div>
+      <div class="slide-num">10</div>
+    </div>
+
+    <!-- SLIDE 11: Auth Flow -->
+    <div class="slide-container">
+      <div class="f-code-badge">Feature Flow</div>
+      <h2>Xác thực (JWT + Bcrypt)</h2>
+
+      <div class="process-container">
+        <div class="process-step">
+          <div class="process-title">Client</div>
+          <p style="font-size: 13px">Đăng nhập (email, pass)</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div
+          class="process-step"
+          style="background: #fdf4ff; border-color: var(--pp)"
+        >
+          <div class="process-title">Server</div>
+          <p style="font-size: 13px">Kiểm tra Hash & Ký JWT</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="process-step">
+          <div class="process-title">Client Storage</div>
+          <p style="font-size: 13px">Lưu Token -> Headers</p>
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top: 20px">
+        <span class="code-fn">Authorization</span>: Bearer
+        eyJhbGciOiJIUzI1NiIsIn...
+      </div>
+      <div class="slide-num">11</div>
+    </div>
+
+    <!-- SLIDE 12: Course Mgmt Flow -->
+    <div class="slide-container">
+      <div class="f-code-badge">REST API</div>
+      <h2>Quản lý khóa học</h2>
+
+      <div class="grid-2">
+        <div>
+          <div
+            class="process-step"
+            style="width: 100%; text-align: left; margin-bottom: 20px"
+          >
+            <i class="fa-solid fa-user-tie" style="margin-right: 12px"></i>
+            <strong>Giáo viên</strong> tạo khóa học
+          </div>
+          <div
+            class="process-step"
+            style="width: 100%; text-align: left; border-color: var(--rd)"
+          >
+            <i
+              class="fa-solid fa-shield-halved"
+              style="color: var(--rd); margin-right: 12px"
+            ></i>
+            <strong>Middleware:</strong> Kiểm tra vai trò
+          </div>
+        </div>
+
+        <div class="code-block">
+          <span class="code-kw">router</span>.<span class="code-fn">post</span
+          >(<span class="code-str">'/courses'</span>,<br />
+          &nbsp;&nbsp;authMiddleware,<br />
+          &nbsp;&nbsp;checkRole(<span class="code-str">'teacher'</span>),<br />
+          &nbsp;&nbsp;courseController.create<br />
+          );
+        </div>
+      </div>
+      <div class="slide-num">12</div>
+    </div>
+
+    <!-- SLIDE 13: Chat Flow -->
+    <div class="slide-container">
+      <div class="f-code-badge">Realtime</div>
+      <h2>Real-time Chat (Socket.io)</h2>
+
+      <div class="process-container">
+        <div class="center">
+          <i
+            class="fa-solid fa-user"
+            style="font-size: 32px; color: var(--bl)"
+          ></i>
+          <p>Student A</p>
+          <div
+            class="code-block"
+            style="font-size: 12px; margin-top: 10px; padding: 10px"
+          >
+            emit('send')
+          </div>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div
+          class="center"
+          style="background: var(--sf); padding: 20px; border-radius: 8px"
+        >
+          <i class="fa-solid fa-server" style="color: var(--pp)"></i>
+          <p>Node Server</p>
+          <p style="font-size: 12px; margin-top: 8px">(Lưu vào DB)</p>
+        </div>
+
+        <i class="fa-solid fa-arrow-right process-arrow"></i>
+
+        <div class="center">
+          <i
+            class="fa-solid fa-user-graduate"
+            style="font-size: 32px; color: var(--gr)"
+          ></i>
+          <p>Student B</p>
+          <div
+            class="code-block"
+            style="font-size: 12px; margin-top: 10px; padding: 10px"
+          >
+            on('receive')
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">13</div>
+    </div>
+
+    <!-- SLIDE 14: Lesson Progress -->
+    <div class="slide-container">
+      <div class="f-code-badge">Logic</div>
+      <h2>Lesson Progress Tracking</h2>
+
+      <div class="grid-2" style="align-items: center">
+        <div class="center">
+          <div
+            style="
+              width: 100%;
+              background: #e2e8f0;
+              height: 20px;
+              border-radius: 10px;
+              overflow: hidden;
+              border: 1px solid var(--bd);
+            "
+          >
+            <div style="width: 75%; background: var(--gr); height: 100%"></div>
+          </div>
+          <p style="margin-top: 10px; font-weight: 700">75% Khoá học</p>
+        </div>
+
+        <div>
+          <div class="highlight-box" style="margin: 0">
+            <p><strong>Action:</strong> Người dùng tạm dừng video.</p>
+            <p>
+              <strong>API:</strong>
+              <span style="font-family: 'JetBrains Mono'; color: var(--bl)"
+                >PUT /lessons/:id/progress</span
+              >
+            </p>
+            <p>
+              <strong>Logic:</strong> Cập nhật `last_watched_second`. Tiếp tục sau
+              đó.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-num">14</div>
+    </div>
+
+    <!-- SLIDE 15: RBAC -->
+    <div class="slide-container">
+      <div class="f-code-badge">Security</div>
+      <h2>Phân quyền</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vai trò</th>
+              <th>Quyền</th>
+              <th>Truy cập</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: var(--gr); font-weight: 700"><strong>Student</strong></td>
+              <td>Xem khóa học đã mua, Học</td>
+              <td>/my-courses, /learn/:id</td>
+            </tr>
+            <tr>
+              <td style="color: var(--bl); font-weight: 700"><strong>Teacher</strong></td>
+              <td>Tạo/Sửa khóa học, Tải lên</td>
+              <td>/instructor/dashboard</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-num">15</div>
+    </div>
+
+    <!-- SLIDE 16: UI Design -->
+    <div class="slide-container">
+      <div class="f-code-badge">Frontend</div>
+      <h2>Interactive Learning UI</h2>
+      <p>Sử dụng Material-UI Components.</p>
+
+      <div class="grid-2">
+        <div
+          style="
+            border: 1px solid var(--bd);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 300px;
+            display: flex;
+          "
+        >
+          <div
+            style="
+              flex: 2;
+              background: #000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+            "
+          >
+            <i class="fa-solid fa-play" style="font-size: 40px"></i>
+          </div>
+          <div style="flex: 1; background: var(--sf); padding: 20px">
+            <div
+              style="height: 10px; background: var(--bd); margin-bottom: 10px"
+            ></div>
+            <div
+              style="height: 10px; background: var(--bd); margin-bottom: 10px"
+            ></div>
+            <div
+              style="height: 10px; background: var(--bd); margin-bottom: 10px"
+            ></div>
+          </div>
+        </div>
+
+        <div style="align-items: flex-start">
+          <ul style="padding-left: 20px">
+            <li style="margin-bottom: 16px">Video Player tích hợp</li>
+            <li style="margin-bottom: 16px">Sidebar điều hướng bài học</li>
+            <li>Hệ thống Rating & Review công khai</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">16</div>
+    </div>
+
+    <!-- SLIDE 17: Handling Media -->
+    <div class="slide-container">
+      <div class="f-code-badge">Assets</div>
+      <h2>Handling Media & Content</h2>
+
+      <div class="process-container" style="justify-content: center; gap: 40px">
+        <div class="center">
+          <i
+            class="fa-brands fa-youtube"
+            style="font-size: 60px; color: var(--rd)"
+          ></i>
+          <p>Video Host</p>
+        </div>
+
+        <i
+          class="fa-solid fa-link"
+          style="font-size: 30px; color: var(--bd)"
+        ></i>
+
+        <div class="center">
+          <i
+            class="fa-solid fa-database"
+            style="font-size: 60px; color: var(--bl)"
+          ></i>
+          <p>Database</p>
+          <div
+            class="code-block"
+            style="font-size: 12px; margin-top: 10px; padding: 6px"
+          >
+            "https://youtu.be/..."
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; color: var(--tx2)">
+        Không lưu file video trực tiếp trên Node Server để giảm tải.
+      </p>
+      <div class="slide-num">17</div>
+    </div>
+
+    <!-- SLIDE 18: Security -->
+    <div class="slide-container">
+      <div class="f-code-badge">Security</div>
+      <h2>Security Measures</h2>
+
+      <div class="grid-2">
+        <div class="process-step" style="width: 100%; border-color: var(--gr)">
+          <i class="fa-solid fa-lock process-icon" style="color: var(--gr)"></i>
+          <div class="process-title">Password Hash</div>
+          <p style="font-size: 14px">BcryptJS (Salted)</p>
+        </div>
+
+        <div class="process-step" style="width: 100%; border-color: var(--pp)">
+          <i
+            class="fa-solid fa-user-shield process-icon"
+            style="color: var(--pp)"
+          ></i>
+          <div class="process-title">API Protection</div>
+          <p style="font-size: 14px">JWT Middleware</p>
+        </div>
+
+        <div class="process-step" style="width: 100%; border-color: var(--bl)">
+          <i
+            class="fa-solid fa-globe process-icon"
+            style="color: var(--bl)"
+          ></i>
+          <div class="process-title">CORS</div>
+          <p style="font-size: 14px">Whitelist Frontend only</p>
+        </div>
+
+        <div class="process-step" style="width: 100%; border-color: var(--rd)">
+          <i class="fa-solid fa-bug process-icon" style="color: var(--rd)"></i>
+          <div class="process-title">Validation</div>
+          <p style="font-size: 14px">Input Sanitization</p>
+        </div>
+      </div>
+      <div class="slide-num">18</div>
+    </div>
+
+    <!-- SLIDE 19: Requirements Check -->
+    <div class="slide-container">
+      <div class="f-code-badge">Summary</div>
+      <h2>Requirements Check</h2>
+
+      <div class="grid-2">
+        <div
+          class="highlight-box"
+          style="margin: 0; background: #fff; border: none"
+        >
+          <ul style="list-style: none; padding: 0">
+            <li style="margin-bottom: 16px">
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              Quản lý khóa học/User
+            </li>
+            <li style="margin-bottom: 16px">
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              Phân loại/Tìm kiếm
+            </li>
+            <li>
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              Đăng ký học (Enroll)
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="highlight-box"
+          style="margin: 0; background: #fff; border: none"
+        >
+          <ul style="list-style: none; padding: 0">
+            <li style="margin-bottom: 16px">
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              Video/Tài liệu/Quiz
+            </li>
+            <li style="margin-bottom: 16px">
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              Tiến trình/Chứng nhận
+            </li>
+            <li>
+              <i
+                class="fa-solid fa-circle-check"
+                style="color: var(--gr); margin-right: 12px"
+              ></i>
+              REST & WebSockets
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">19</div>
+    </div>
+
+    <!-- SLIDE 20: Conclusion -->
+    <div class="slide-container">
+      <div class="f-code-badge">The End</div>
+      <h2>Final Conclusion</h2>
+
+      <div class="center">
+        <i
+          class="fa-solid fa-flag-checkered"
+          style="font-size: 80px; color: var(--bl); margin-bottom: 32px"
+        ></i>
+        <p style="font-size: 24px; max-width: 800px; text-align: center">
+          F-Code Learning Platform là hệ thống hoàn chỉnh, sẵn sàng mở rộng
+          (Scalable) và tích hợp thanh toán.
+        </p>
+
+        <div style="display: flex; gap: 20px; margin-top: 40px">
+          <div class="process-step" style="width: auto; padding: 10px 30px">
+            Microservices Ready
+          </div>
+          <div class="process-step" style="width: auto; padding: 10px 30px">
+            CI/CD Pipeline
+          </div>
+        </div>
+
+        <p style="margin-top: 40px; font-weight: 700; color: var(--tx2)">
+          Cảm ơn BGK và các bạn đã lắng nghe.
+        </p>
+      </div>
+      <div class="slide-num">20</div>
+    </div>
+  </body>
+</html>
